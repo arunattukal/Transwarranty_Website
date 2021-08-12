@@ -1,0 +1,714 @@
+﻿
+@{
+    ViewBag.Title = "InvestorRelations";
+    Layout = "~/Views/Shared/_TranswarrantyMaster.cshtml";
+}
+
+<link href="~/Content/InvestorRelationsCSS.css" rel="stylesheet" />
+<!---------->
+<!--Scripts-->
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/Swal/sweetalert.min.js"></script>
+
+
+<script>
+
+        function AjaxCalls(ReportType, Pattern, Year, Period)
+        {
+            $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GetFile_InvRelation", "Transwarranty")",
+                    dataType: "json",
+                    data: { ReportType: ReportType, Pattern: Pattern, Year: Year, Period: Period },
+                    success: function (data) {
+                        //alert(JSON.stringify(data.lmodel));
+                        //--- Financial
+                        //alert(ReportType);
+                        if ((ReportType == "financial") || (ReportType === 'financial' && Pattern === 'annualfinancial') || (ReportType === 'financial' && Pattern === 'quarterly') || (ReportType === 'financial' && Pattern === 'limitedreviewrpt') || (ReportType === 'financial' && Pattern === 'subcompany') || (ReportType === 'shareholder' && Pattern === 'corporategovernance') || (ReportType === 'shareholder' && Pattern === 'investorcomplaints') || (ReportType === 'shareholder' && Pattern === 'shareholdingpattern') || (ReportType === 'shareholder' && Pattern === 'boardmeeting')) {
+
+                            if (data.lmodel.length > 0) {
+                                $("#AdvertisementsTbl").css('display', 'inline-table');
+                                var row = "";
+                                var i = 1;
+                                $.each(data.lmodel, function (index, value) {
+                                    row += '<tr>';
+                                    row += '<td style="text-align:left">' + i + '</td>';
+                                    row += '<td class="' + value.ReportId + '" style="text-align:left">' + value.Value + '</td>';
+                                    row += '<td style="text-align:left"><img id="' + value.Value + '" onclick="DownloadFile(' + i + ')" class="Shareholderdownload" style="cursor:pointer; border: none; width: 34px;" src="../img/InvDownloads.png"/></td>';
+                                    row += '</tr>';
+                                    $("#AdvertisementsTbl tbody").html(row);
+                                    i = i + 1;
+                                });
+                            } else {
+
+                                swal('No Details Found');
+                                $("#AdvertisementsTbl").css('display', 'none');
+                            }
+                        }
+                        //--- ShareHolder
+                        else if ((ReportType == "newspaperadvertisment") || (ReportType === 'stockexchange') || (ReportType === 'materialevents')) {
+                            //alert('Welcome');
+                            if (data.lmodel.length > 0) {
+                                $("#AdvertisementsTbl").css('display', 'inline-table');
+                                var row = "";
+                                var i = 1;
+                                $.each(data.lmodel, function (index, value) {
+                                    row += '<tr>';
+                                    row += '<td style="text-align:left">' + i + '</td>';
+                                    row += '<td class="' + value.ReportId + '" style="text-align:left">' + value.Value + '</td>';
+                                    row += '<td style="text-align:left"><img id="' + value.Value + '" onclick="DownloadFile(' + i + ')" class="Shareholderdownload" style="cursor:pointer; border: none; width: 34px;" src="../img/InvDownloads.png"/></td>';
+                                    row += '</tr>';
+                                    $("#AdvertisementsTbl tbody").html(row);
+                                    i = i + 1;
+                                });
+                            }
+                            else {
+                                //hide div
+                                swal('No Details Found');
+                                $("#AdvertisementsTbl").css('display', 'none');
+                            }
+
+                        }
+                        else if ((ReportType == "annual" && Pattern == "annualtranswarranty") || (ReportType == "annual" && Pattern == "subcompany") || (ReportType == "unclaimeddividend") || (ReportType == "policies") || (ReportType == "general")) {
+                            if (data.lmodel.length > 0) {
+
+                                $("#AdvertisementsTbl").css('display', 'inline-table');
+                                var row = "";
+                                var i = 1;
+                                $.each(data.lmodel, function (index, value) {
+                                    row += '<tr>';
+                                    row += '<td style="text-align:left">' + i + '</td>';
+                                    row += '<td class="' + value.ReportId + '" style="text-align:left">' + value.Value + '</td>';
+                                    row += '<td style="text-align:left"><img id="' + value.Value + '" onclick="DownloadFile(' + i + ')" class="Shareholderdownload" style="cursor:pointer; border: none; width: 34px;" src="../img/InvDownloads.png"/></td>';
+                                    row += '</tr>';
+                                    $("#AdvertisementsTbl tbody").html(row);
+                                    i = i + 1;
+                                });
+                            } else {
+
+                                swal('No Details Found');
+                                $("#AdvertisementsTbl").css('display', 'none');
+                            }
+                        }
+
+                    },
+
+                    error: function (data) {
+                        swal(JSON.stringify(response));
+                    }
+                });
+            }
+    $(document).ready(function () {
+
+            document.getElementById("defaultOpen").click();
+            $("#DivShowPdf").css('display', 'none');
+            $("#DivARShowPdf").css('display', 'none');
+            $("#ShareHolderTbl").css('display', 'none');
+            $("#AdvertisementsTbl").css('display', 'none');
+            $("#InvestorTbl").css('display', 'none');
+            $("#CodeOfConduct").css('display', 'none');
+            $("#InvContacts").css('display', 'none');
+            $("#Composition").css('display', 'none');
+            $("#AnnualRpt").css('display', 'none');
+
+        $("#defaultOpen").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'financial';
+            ReportType = 'financial';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#BtnAnnualFin").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'annualfinancial';
+            ReportType = 'financial';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#Btnquarterly").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'quarterly';
+            ReportType = 'financial';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#Btnreviewrpt").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'limitedreviewrpt';
+            ReportType = 'financial';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#Btnfsubcompany").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'subcompany';
+            ReportType = 'financial';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#BtnShareholder").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+                Pattern = 'corporategovernance';
+                ReportType = 'shareholder';
+                var Year = "NA";
+                var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#BtnInvestor").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'investorcomplaints';
+            ReportType = 'shareholder';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#BtnSHpattern").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'shareholdingpattern';
+            ReportType = 'shareholder';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#BtnBroad").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'boardmeeting';
+            ReportType = 'shareholder';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#Btngeneral").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            Pattern = 'NA';
+            ReportType = 'general';
+            var Year = "NA";
+            var Period = "NA";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        Search();
+        $("#BtnATrans").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            var ReportType = "annual";
+            var Year = "NA";
+            var Period = "NA";
+            var Pattern = "annualtranswarranty";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+        $("#BtnASub").click(function () {
+            $('#AdvertisementsTbl').find('tbody').empty();
+            var ReportType = "annual";
+            var Year = "NA";
+            var Period = "NA";
+            var Pattern = "subcompany";
+            AjaxCalls(ReportType, Pattern, Year, Period);
+        });
+
+            $("#BtnExchange").click(function () {
+                $('#AdvertisementsTbl').find('tbody').empty();
+                var ReportType = "stockexchange";
+                var Pattern = "NA";
+                var Year = "NA";
+                var Period = "NA";
+                AjaxCalls(ReportType, Pattern, Year, Period);
+            });
+            $("#BtnMaterial").click(function () {
+                $('#AdvertisementsTbl').find('tbody').empty();
+                var ReportType = "materialevents";
+                var Pattern = "NA";
+                var Year = "NA";
+                var Period = "NA";
+                AjaxCalls(ReportType, Pattern, Year, Period);
+            });
+            $("#BtnNewspaper").click(function () {
+                $('#AdvertisementsTbl').find('tbody').empty();
+                var ReportType = "newspaperadvertisment";
+                var Pattern = "NA";
+                var Year = "NA";
+                var Period = "NA";
+                AjaxCalls(ReportType, Pattern, Year, Period);
+            });
+            $("#Btnunclaimed").click(function () {
+                $('#AdvertisementsTbl').find('tbody').empty();
+                var ReportType = "unclaimeddividend";
+                var Pattern = "NA";
+                var Year = "NA";
+                var Period = "NA";
+                AjaxCalls(ReportType, Pattern, Year, Period);
+            });
+            $("#Btnpolicies").click(function () {
+                $('#AdvertisementsTbl').find('tbody').empty();
+                var ReportType = "policies";
+                var Pattern = "NA";
+                var Year = "NA";
+                var Period = "NA";
+                AjaxCalls(ReportType, Pattern, Year, Period);
+            });
+
+
+    });
+    function DownloadFile(index) {
+        var result = $("#AdvertisementsTbl").find('tr:eq(' + index + ')').find('td:eq(1)').text();
+            var ReportType = result.split('_')[0];
+        var Sub_cat = result.split('_')[1];
+
+        window.location = '/Transwarranty/DownloadPdf?reportId=' + result + "&type=" + ReportType + "&subOption=" + Sub_cat;
+    }
+    function Search() {
+
+            var ReportType = $("#reportType_p").html();
+            var Pattern = "NA"
+            if (ReportType === 'financial') {
+                Pattern = ReportType;
+                ReportType = 'financial';
+            }
+            else if (ReportType === 'corporategovernance') {
+                Pattern = ReportType;
+                ReportType = 'shareholder';
+            }
+            else if (ReportType === 'investorcomplaints') {
+                Pattern = ReportType;
+                ReportType = 'shareholder';
+            }
+            else if (ReportType === 'shareholderpattern') {
+                Pattern = ReportType;
+                ReportType = 'shareholder';
+            }
+            var Year = 'NA';
+            var Period = 'NA';
+            if ((ReportType === 'financial') || (ReportType === 'shareholder' && Pattern === 'corporategovernance') || (ReportType === 'shareholder' && Pattern === 'investorcomplaints')) {
+                Year = $("#DdlYear").val();
+                Period = $("#DdlQrtr").val();
+            }
+
+            AjaxCalls(ReportType, Pattern, Year, Period);
+    }
+</script>
+<script>
+
+    function displayDiv(reportType, hName) {
+
+        $("#reportType_p").html(reportType);
+        $("#report_head").html(hName);
+
+        $("#reportType_np").html(reportType);
+        $("#report_nphead").html(hName);
+
+        $("#reportType_cd").html(reportType);
+        $("#report_cdhead").html(hName);
+
+        $("#reportType_Inv").html(reportType);
+        $("#report_Invhead").html(hName);
+
+        $("#reportType_Com").html(reportType);
+        $("#report_Comhead").html(hName);
+
+        if (reportType === 'financial' || reportType === 'corporategovernance' || reportType === 'investorcomplaints' || reportType === 'shareholderpattern' || reportType === 'unclaimeddividend' || reportType === 'policies') {
+            $("#DivShowPdf").css('display', 'none');
+            $('#searchDiv').css('display', 'none');
+            $("#Advertisements").css('display', 'block');
+            $("#CodeOfConduct").css('display', 'none');
+            $("#Composition").css('display', 'none');
+            $("#AnnualRpt").css('display', 'none');
+            $("#InvContacts").css('display', 'none');
+        }
+        else if (reportType === 'meeting' || reportType === 'newspaperadvertisment' || reportType === 'materialevents' || reportType === 'investorrelations' || reportType === 'stockexchange' || reportType === 'subcompany') {
+            $('#searchDiv').css('display', 'none');
+            $("#CodeOfConduct").css('display', 'none');
+            $("#InvContacts").css('display', 'none');
+            $("#Composition").css('display', 'none');
+            $("#AnnualRpt").css('display', 'none');
+            $("#Advertisements").css('display', 'block');
+        }
+        else if (reportType === 'annualtranswarranty' || reportType === 'shareholdingpattern' || reportType === 'boardmeeting' || reportType === 'general' || reportType === 'subcompany' || reportType === 'annualfinancial' || reportType === 'quarterly' || reportType === 'limitedreviewrpt') {
+            $("#DivShowPdf").css('display', 'none');
+            $('#searchDiv').css('display', 'none');
+            $("#Advertisements").css('display', 'block');
+            $("#CodeOfConduct").css('display', 'none');
+            $("#InvContacts").css('display', 'none');
+            $("#Composition").css('display', 'none');
+            $("#AnnualRpt").css('display', 'none');
+        }
+        else if (reportType === 'investorcontact') {
+            $("#DivShowPdf").css('display', 'none');
+            $('#searchDiv').css('display', 'none');
+            $("#Advertisements").css('display', 'none');
+            $("#CodeOfConduct").css('display', 'none');
+            $("#Composition").css('display', 'none');
+            $("#AnnualRpt").css('display', 'none');
+            $("#InvContacts").css('display', 'block');
+        }
+        else if (reportType === 'composition') {
+            $("#DivShowPdf").css('display', 'none');
+            $('#searchDiv').css('display', 'none');
+            $("#Advertisements").css('display', 'none');
+            $("#CodeOfConduct").css('display', 'none');
+            $("#InvContacts").css('display', 'none');
+            $("#AnnualRpt").css('display', 'none');
+            $("#Composition").css('display', 'block');
+        }
+    }
+    function FinFunction() {
+        document.getElementById("FinDropdown").classList.toggle("show");
+    }
+    function AnnualFunction() {
+        document.getElementById("AnDropdown").classList.toggle("show");
+    }
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
+<!----------->
+<!-- Start Page Title Area -->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Investor Relations</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="page-title-area item-bg2 jarallax" style="padding-top: 160px;" data-jarallax='{"speed": 0.3}'>
+    <div class="container">
+        <div class="page-title-content">
+            <h2 style="color: #75bc00; font-weight:600;">Investor Relations</h2>
+        </div>
+    </div>
+</div>-->
+<!-- End Page Title Area -->
+<!-- Start Pricing Area -->
+<div class="more-info about-info">
+    <section class="features-area ptb-70 bg-f6f4f8" tabindex="1" id="margin">
+
+        <div class="container" style="margin-top:20px">
+
+            <div class="row">
+                <div class="col-md-8">
+
+                    <!--Financial Report-->
+                    <div id="searchDiv" style="width:100%" class="row visible">
+                        <div class="col-md-12">
+                            <div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">
+                                <h3 id="report_head" style="font-size : 19px !important;">Financial Results</h3>
+                                <p id="reportType_p" style="visibility:hidden"></p>
+                            </div>
+                            <div class="row">
+                                <!--Dropdown-->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <!----------------->
+                                <!--Search Button-->
+                                <div class="col-md-4" style="text-align:center;">
+                                    <!--<button type="button" value="submit" class="btn btn-primary" id="search" data-toggle="modal" data-target="#myModal">Search</button>>-->
+                                    <div id="msgSubmit" class="h3 text-center hidden"></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <!----------------->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-------------------->
+                    <!--News Paper Advertisements-->
+
+                    <div class="row">
+                        <div id="Advertisements" class="col-md-12">
+                            @*<div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">*@
+                            <h3 id="report_nphead" style="font-size : 19px !important;">News Paper Advertisements</h3>
+                            <p id="reportType_np" style="visibility:hidden"></p>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!--Data Table-->
+                                    <table id="AdvertisementsTbl" class="responsive-table" style=" width: 95%;">
+                                        <thead>
+                                            <tr>
+                                                <th>SlNo</th>
+                                                <th>Caption</th>
+                                                <th>View</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                    <!------------->
+                                </div>
+                            </div>
+                            @*</div>*@
+                        </div>
+                    </div>
+
+                    <!-------------------------->
+                    <!-- Investor Contacts -->
+                    <div class="row">
+                        <div id="InvContacts" class="col-md-12">
+                            <div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">
+                                <h3 id="report_Invhead" style="font-size : 19px !important;">Investor Contacts</h3>
+                                <p id="reportType_Inv" style="visibility:hidden"></p>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row" style="margin-top:20px">
+                                            <div class="col-md-6 offset-md-3" style="text-align: center;">
+                                                <h5 style="color: #75bc00;">Registered & Corporate Office</h5>
+                                                <p>403, Regent Chambers, </p>
+                                                <p>Nariman Point, </p>
+                                                <p>Mumbai 400 021 </p>
+                                                <p>Tel. No. 022-6630 6090</p>
+                                                <p>Fax No. 022- 6630 6655</p>
+
+                                                <h5 style="color: #75bc00;">Registrar & Share Transfer Agents (RTA)</h5>
+                                                <p>Link Intime India Private Limited</p>
+                                                <p>C 101, 247 Park, </p>
+                                                <p>L. B.S. Marg, Vikhroli West, </p>
+                                                <p>Mumbai 400 083</p>
+                                                <p>Tel No: +92 22 49186000  Fax: +91 22 49186060</p>
+                                                <p>Email: rnt.helpdesk@linkintime.co.in</p>
+
+                                                <h5 style="color: #75bc00;">Compliance Officer for Investor Grievances</h5>
+                                                <p>Mr. Suhas Borgaonkar</p>
+
+                                                <h5 style="color: #75bc00;">Contact Details:</h5>
+                                                <p>Tel No:022 40010900 /66306090</p>
+
+                                                <h5 style="color: #75bc00;">E-mail Id for Grievance Redressal:</h5>
+                                                <p><a href="companysecretary@transwarranty.com">companysecretary@transwarranty.com</a></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!------------------------->
+                    <!--Composition of Committees of Board-->
+                    <div class="row">
+                        <div id="Composition" class="col-md-12">
+                            <div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">
+                                <h3 id="report_Comhead" style="font-size : 19px !important;">Composition of Committees of Board</h3>
+                                <p id="reportType_Com" style="visibility:hidden"></p>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                                <div class="conduct-sc scroll" style="width:715px;">
+                                                    <div style="padding-bottom: 60px;">
+                                                        <h4 style="font-size: x-large; font-weight: 500; text-align: center; color: #75bc00;">Audit Committee</h4>
+                                                        <table class="table table-borderless">
+                                                            <tr>
+                                                                <th>Name of Directors</th>
+                                                                <th>Category</th>
+                                                                <th>Designation</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mr. Sudharsanan Nair</td>
+                                                                <td>Non-Executive and Independent</td>
+                                                                <td>Chairman</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mr. Kumar Nair</td>
+                                                                <td>Executive Director</td>
+                                                                <td>Member</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mrs. Nirmala S. Parab</td>
+                                                                <td>Non-Executive and Independent</td>
+                                                                <td>Member</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div style="padding-bottom: 60px;">
+                                                        <h4 style="font-size: x-large; font-weight: 500; text-align: center; color: #75bc00;">StakeHolders’ Relationship Committee</h4>
+                                                        <table class="table table-borderless">
+                                                            <tr>
+                                                                <th>Name of Directors</th>
+                                                                <th>Category</th>
+                                                                <th>Designation</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mr. Sudharsanan Nair</td>
+                                                                <td>Non-Executive and Independent</td>
+                                                                <td>Chairman</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mr. Kumar Nair</td>
+                                                                <td>Executive Director</td>
+                                                                <td>Member</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mrs. Nirmala S. Parab</td>
+                                                                <td>Non-Executive and Independent</td>
+                                                                <td>Member</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div style="padding-bottom: 60px;">
+                                                        <h4 style="font-size: x-large; font-weight: 500; text-align: center; color: #75bc00;">Nomination, Remuneration And Compensation Committee</h4>
+                                                        <table class="table table-borderless">
+                                                            <tr>
+                                                                <th>Name of Directors</th>
+                                                                <th>Category</th>
+                                                                <th>Designation</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mrs. Nirmala S. Parab</td>
+                                                                <td>Non-Executive and Independent</td>
+                                                                <td>Chair Person</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mr. Kumar Nair</td>
+                                                                <td>Executive Director</td>
+                                                                <td>Member</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Mr. Sudharsanan Nair</td>
+                                                                <td>Non-Executive and Independent</td>
+                                                                <td>Member</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-------------------------------------->
+                    <!--- Annual Report --->
+                    <div id="AnnualRpt" style="width:100%" class="row visible">
+                        <div class="col-md-12">
+                            <div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">
+                                <h3 id="report_AR" style="font-size : 19px !important;">Annual Report</h3>
+                                <p id="reportType_AR" style="visibility:hidden"></p>
+                            </div>
+                            <div class="row">
+                                <!--Dropdown-->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+
+
+                                </div>
+                                <!--Search Button-->
+                                <div class="col-md-4" style="text-align:center;">
+                                    <!--<button type="button" value="submit" class="btn btn-primary" id="AnnualSrch" data-toggle="modal" data-target="#myModal">Search</button>-->
+                                    <div id="msgSubmit" class="h3 text-center hidden"></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <!--Div For Show PDF-->
+                            <div id="DivARShowPdf" class="row" style="margin-top:30px;padding-bottom:30px">
+                                @*<div class="col-md-12">*@
+                                <div class="col-md-8" style="text-align:center;padding-top:10px;">
+                                    <!--<input type="text" id="ARPdfviewer" class="form-control" style="height: 30px;" disabled="disabled">-->
+                                </div>
+                                <div class="col-md-4" style="text-align:center;padding-top:10px">
+                                    <!--<button type="submit" id="ARDownloadFile" class="btn btn-primary" style="height: 30px; padding: 8px;">Download File</button>-->
+                                </div>
+                                @* </div> *@
+                            </div>
+                            <!-------------------->
+                        </div>
+                    </div>
+                    <!--------------------->
+                    @*<div class="row">
+                            <div id="Conduct" class="tabcontent">
+                                <div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">
+                                    <h3 style="font-size : 19px !important;">Code of Conduct</h3>
+                                </div>
+                            </div>
+                        </div>*@
+                </div>
+                <!--------------->
+                <div class="col-md-4">
+                    <div id="menu">
+                        <div class="row">
+                            <div class="col-lg-12" @*style="margin-left: 775px;*@ @*margin-top:-315px;*@>
+                                <div class="tab">
+                                    <ul class="pricing-features">
+                                        <div class="dropdown">
+                                            <button class="tablinks dropbtn" onclick="displayDiv('financial', 'Financial Results'), FinFunction();" id="defaultOpen">Financial Results</button>
+                                            <div id="FinDropdown" class="dropdown-content">
+                                                <button id="BtnAnnualFin" class="tablinks" onclick="displayDiv('annualfin', 'Annual Financial Results')">Annual Financial Results</button>
+                                                <button id="Btnquarterly" class="tablinks" onclick="displayDiv('quarterly', 'Quarterly Result')">Quarterly Result</button>
+                                                <button id="Btnreviewrpt" class="tablinks" onclick="displayDiv('reviewrpt', 'Limited Review Report')">Limited Review Report</button>
+                                                <button id="Btnfsubcompany" class="tablinks" onclick="displayDiv('subcompany', 'Subsidiary Companies')">Subsidiary Companies</button>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown">
+                                            <button id="BtnAnnual" class="tablinks dropbtn" onclick="displayDiv('annualtranswarranty', 'Transwarranty Finance Ltd'), AnnualFunction();">Annual Report</button>
+                                            <div id="AnDropdown" class="dropdown-content">
+                                                <button id="BtnATrans" class="tablinks" onclick="displayDiv('annualtranswarranty', 'Transwarranty Finance Ltd')">Transwarranty Finance Ltd</button>
+                                                <button id="BtnASub" class="tablinks" onclick="displayDiv('subcompany', 'Subsidiary Companies')">Subsidiary Companies</button>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown">
+                                            <button id="Btngeneral" class="tablinks" onclick="displayDiv('general', 'AGM & EGM')">AGM & EGM</button>
+                                        </div>
+                                        <div class="dropdown">
+                                            <button id="BtnShareholder" class="tablinks dropbtn" onclick="displayDiv('corporategovernance', 'Corporate Governance'), myFunction();">Shareholder Information</button>
+                                            <div id="myDropdown" class="dropdown-content">
+                                                <button id="BtnGovernance" class="tablinks" onclick="displayDiv('corporategovernance', 'Corporate Governance')">Corporate Governance</button>
+                                                <button id="BtnInvestor" class="tablinks" onclick="displayDiv('investorcomplaints', 'Investor Complaints')">Investor Complaints</button>
+                                                <button id="BtnSHpattern" class="tablinks" onclick="displayDiv('shareholdingpattern', 'Shareholding Pattern')">Shareholding Pattern</button>
+                                                <button id="BtnBroad" class="tablinks" onclick="displayDiv('boardmeeting', 'Board Meeting')">Board Meeting</button>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown">
+                                            <button id="BtnExchange" class="tablinks" onclick="displayDiv('stockexchange', 'Other Filings with Stock Exchanges')">Other Filings with Stock Exchanges</button>
+                                            <button id="BtnMaterial" class="tablinks" onclick="displayDiv('materialevents', 'Material Events')">Material Events</button>
+                                            <button id="BtnNewspaper" class="tablinks" onclick="displayDiv('newspaperadvertisment', 'Newspaper Advertisement')">Newspaper Advertisement</button>
+                                            <button id="Btnunclaimed" class="tablinks" onclick="displayDiv('unclaimeddividend', 'Unclaimed Dividend')">Unclaimed Dividend</button>
+                                            <button id="Btnpolicies" class="tablinks" onclick="displayDiv('policies', 'Policies')">Policies</button>
+                                            <button id="Btncommittees" class="tablinks" onclick="displayDiv('composition', 'Composition of Committees')">Composition of Committees</button>
+                                            <button id="Btninvestor" class="tablinks" onclick="displayDiv('investorcontact', 'Investor Contact')">Investor Contact</button>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+
+
