@@ -29,10 +29,10 @@ function ReportType() {
         $("#div_Period").hide();
         $("#div_Annual").show();
     }
-    else if (ReportType == "general") {
+    else if (ReportType == "AgmAndEgm") {
         $("#div_SharePattern").hide();
         $("#div_FinPattern").hide();
-        $("#div_Year").hide();
+        $("#div_Year").show();
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
@@ -177,10 +177,11 @@ function uploadedReports() {
     var Sub_cat = $("#SharePattern").val();
     var Fin_cat = $("#FinancialPattern").val();
     var Annu_cat = $("#AnnualPattern").val();
+    var Year = $("#Year").val();
     $.ajax({
         type: "POST",
         url: "/ReportUpload/uploadedReports",
-        data: { type: ReportType, subOption: Sub_cat, Fincaty: Fin_cat, Annucaty: Annu_cat },
+        data: { type: ReportType, subOption: Sub_cat, Fincaty: Fin_cat, Annucaty: Annu_cat, year: Year },
         success: function (response) {
             if (response.data.length != 0) {
                 var i = 1;
@@ -211,11 +212,12 @@ function RemoveUpload(index) {
         var Sub_cat = $("#SharePattern").val();
         var Fin_cat = $("#FinancialPattern").val();
         var Annu_cat = $("#AnnualPattern").val();
+        var Year = $("#Year").val();
         $.ajax({
             type: "POST",
             url: "/ReportUpload/RemoveUploadedReports",
             dataType: "json",
-            data: { reportId: result, type: ReportType, subOption: Sub_cat, Fincaty: Fin_cat, Annucaty: Annu_cat},
+            data: { reportId: result, type: ReportType, subOption: Sub_cat, Fincaty: Fin_cat, Annucaty: Annu_cat, year: Year},
             success: function (response) {
                 if (response.Result === "success") {
                     swal('File Removed Successfully');

@@ -12,18 +12,14 @@ namespace Transwarranty_App.Controllers
     public class ReportUploadController : Controller
     {
         // GET: ReportUpload
-        public static string FINANCIAL_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\Financial\";
-        public static string FINANCIALAF_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\AnnualFinancial\";
-        public static string FINANCIALAGM_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\AnnualGeneralMeeting\";
-        public static string FINANCIALLRR_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\LimitedReviewReport\";
-        public static string FINANCIALQR_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\QuarterlyResult\";
+        public static string FINANCIAL_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\Transwarranty\";
+        public static string FINANCIALSUB_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\Subcompany\";
         public static string ANNUALTRAN_PATH = @"C:\TRANSWARRANTYREPORTS\Annual\Transwarranty\";
         public static string ANNUALSUB_PATH = @"C:\TRANSWARRANTYREPORTS\Annual\Subcompany\";
         public static string AGM_PATH = @"C:\TRANSWARRANTYREPORTS\AGM\";
         public static string SHARECG_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\CorporateGovernance\";
         public static string SHAREIC_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\Investorcomplaints\";
         public static string SHAREHOLDING_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\ShareHoldingPattern\";
-        public static string BOARDMEETING_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\";
         public static string GRIEVANCE_PATH = @"C:\TRANSWARRANTYREPORTS\Grievances\";
         public static string POLICIES_PATH = @"C:\TRANSWARRANTYREPORTS\Policies\";
         public static string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\";
@@ -194,14 +190,14 @@ namespace Transwarranty_App.Controllers
                     writer.Write(bytes, 0, bytes.Length);
                     writer.Close();
                 }
-                else if (formData["ReportType"].Equals("general"))
+                else if (formData["ReportType"].Equals("AgmAndEgm"))
                 {
-                    ReportID = formData["ReportType"] + "_" + unixTimestamp;
-                    year = "NA";
+                    string AGMAndEGM_PATH = @"C:\TRANSWARRANTYREPORTS\AGM\" + year + "\\";
+                    ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     quarter = "NA";
 
                     string materialeventsfilename = ReportID + ".pdf";
-                    string materialeventsfilePath = AGM_PATH + materialeventsfilename;
+                    string materialeventsfilePath = AGMAndEGM_PATH + materialeventsfilename;
 
                     byte[] bytes = Convert.FromBase64String(fileContent);
 
@@ -223,7 +219,7 @@ namespace Transwarranty_App.Controllers
                     string subcategory = "NA";
                     subcategory = formData["Annual_Sub"];
 
-                    if (subcategory.Equals("annualtranswarranty"))
+                    if (subcategory.Equals("transwarranty"))
                     {
                         ReportID = formData["ReportType"] + "_" + subcategory + "_" + year;
 
@@ -273,7 +269,7 @@ namespace Transwarranty_App.Controllers
                     string subcategory = "NA";
                     subcategory = formData["Financial_Sub"];
 
-                    if (subcategory.Equals("financial"))
+                    if (subcategory.Equals("transwarranty"))
                     {
                         ReportID = formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + formData["Quarter"];
                         year = "NA";
@@ -297,12 +293,12 @@ namespace Transwarranty_App.Controllers
                         writer_1.Write(bytes_1, 0, bytes_1.Length);
                         writer_1.Close();
                     }
-                    else if (subcategory.Equals("annualfinancial"))
+                    else if (subcategory.Equals("subcompany"))
                     {
                         ReportID = formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + formData["Quarter"];
 
                         string FINANCIALAF_PATHfilename = ReportID + ".pdf";
-                        string FINANCIALAF_PATHfilePath = FINANCIALAF_PATH + FINANCIALAF_PATHfilename;
+                        string FINANCIALAF_PATHfilePath = FINANCIALSUB_PATH + FINANCIALAF_PATHfilename;
 
                         byte[] bytes_2 = Convert.FromBase64String(fileContent);
 
@@ -314,72 +310,6 @@ namespace Transwarranty_App.Controllers
                             status = "Error";
                         }
                         System.IO.FileStream stream_2 = new FileStream(FINANCIALAF_PATHfilePath, FileMode.CreateNew);
-                        System.IO.BinaryWriter writer_2 =
-                        new BinaryWriter(stream_2);
-                        writer_2.Write(bytes_2, 0, bytes_2.Length);
-                        writer_2.Close();
-                    }
-                    else if (subcategory.Equals("quarterly"))
-                    {
-                        ReportID = formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + formData["Quarter"];
-
-                        string FINANCIALQR_PATHfilename = ReportID + ".pdf";
-                        string FINANCIALQR_PATHfilePath = FINANCIALQR_PATH + FINANCIALQR_PATHfilename;
-
-                        byte[] bytes_2 = Convert.FromBase64String(fileContent);
-
-                        //check is file exists
-                        if (System.IO.File.Exists(FINANCIALQR_PATHfilePath))
-                        {
-                            System.IO.File.SetAttributes(FINANCIALQR_PATHfilePath, FileAttributes.Normal);
-                            System.IO.File.Delete(FINANCIALQR_PATHfilePath);
-                            status = "Error";
-                        }
-                        System.IO.FileStream stream_2 = new FileStream(FINANCIALQR_PATHfilePath, FileMode.CreateNew);
-                        System.IO.BinaryWriter writer_2 =
-                        new BinaryWriter(stream_2);
-                        writer_2.Write(bytes_2, 0, bytes_2.Length);
-                        writer_2.Close();
-                    }
-                    else if (subcategory.Equals("limitedreviewrpt"))
-                    {
-                        ReportID = formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + formData["Quarter"];
-
-                        string FINANCIALLRR_PATHfilename = ReportID + ".pdf";
-                        string FINANCIALLRR_PATHfilePath = FINANCIALLRR_PATH + FINANCIALLRR_PATHfilename;
-
-                        byte[] bytes_2 = Convert.FromBase64String(fileContent);
-
-                        //check is file exists
-                        if (System.IO.File.Exists(FINANCIALLRR_PATHfilePath))
-                        {
-                            System.IO.File.SetAttributes(FINANCIALLRR_PATHfilePath, FileAttributes.Normal);
-                            System.IO.File.Delete(FINANCIALLRR_PATHfilePath);
-                            status = "Error";
-                        }
-                        System.IO.FileStream stream_2 = new FileStream(FINANCIALLRR_PATHfilePath, FileMode.CreateNew);
-                        System.IO.BinaryWriter writer_2 =
-                        new BinaryWriter(stream_2);
-                        writer_2.Write(bytes_2, 0, bytes_2.Length);
-                        writer_2.Close();
-                    }
-                    else if (subcategory.Equals("subcompany"))
-                    {
-                        ReportID = formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + formData["Quarter"];
-
-                        string FINANCIALAGM_PATHfilename = ReportID + ".pdf";
-                        string FINANCIALAGM_PATHfilePath = FINANCIALAGM_PATH + FINANCIALAGM_PATHfilename;
-
-                        byte[] bytes_2 = Convert.FromBase64String(fileContent);
-
-                        //check is file exists
-                        if (System.IO.File.Exists(FINANCIALAGM_PATHfilePath))
-                        {
-                            System.IO.File.SetAttributes(FINANCIALAGM_PATHfilePath, FileAttributes.Normal);
-                            System.IO.File.Delete(FINANCIALAGM_PATHfilePath);
-                            status = "Error";
-                        }
-                        System.IO.FileStream stream_2 = new FileStream(FINANCIALAGM_PATHfilePath, FileMode.CreateNew);
                         System.IO.BinaryWriter writer_2 =
                         new BinaryWriter(stream_2);
                         writer_2.Write(bytes_2, 0, bytes_2.Length);
@@ -457,28 +387,6 @@ namespace Transwarranty_App.Controllers
                         writer.Write(bytes, 0, bytes.Length);
                         writer.Close();
                     }
-                    else if (subcategory.Equals("boardmeeting"))
-                    {
-                        ReportID = formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + formData["Quarter"];
-
-                        string BOARDMEETING_PATHfilename = ReportID + ".pdf";
-                        string BOARDMEETING_PATHfilePath = BOARDMEETING_PATH + BOARDMEETING_PATHfilename;
-
-                        byte[] bytes = Convert.FromBase64String(fileContent);
-
-                        //check is file exists
-                        if (System.IO.File.Exists(BOARDMEETING_PATHfilePath))
-                        {
-                            System.IO.File.SetAttributes(BOARDMEETING_PATHfilePath, FileAttributes.Normal);
-                            System.IO.File.Delete(BOARDMEETING_PATHfilePath);
-                            status = "Error";
-                        }
-                        System.IO.FileStream stream = new FileStream(BOARDMEETING_PATHfilePath, FileMode.CreateNew);
-                        System.IO.BinaryWriter writer =
-                        new BinaryWriter(stream);
-                        writer.Write(bytes, 0, bytes.Length);
-                        writer.Close();
-                    }
                 }
             }
             catch (Exception ex)
@@ -487,7 +395,7 @@ namespace Transwarranty_App.Controllers
             }
             return status;
         }
-        public JsonResult uploadedReports(string type, string subOption, string Fincaty, string Annucaty)
+        public JsonResult uploadedReports(string type, string subOption, string Fincaty, string Annucaty, string year)
         {
 
             string ReportType = type;
@@ -498,7 +406,7 @@ namespace Transwarranty_App.Controllers
             List<ListItem> files = new List<ListItem>();
             if (ReportType == "financial")
             {
-                if (fincaty == "financial")
+                if (fincaty == "transwarranty")
                 {
                     string[] filesPath = Directory.GetFiles(FINANCIAL_PATH);
                     foreach (string path in filesPath)
@@ -506,33 +414,9 @@ namespace Transwarranty_App.Controllers
                         files.Add(new ListItem(Path.GetFileName(path)));
                     }
                 }
-                else if (fincaty == "annualfinancial")
-                {
-                    string[] filesPath = Directory.GetFiles(FINANCIALAF_PATH);
-                    foreach (string path in filesPath)
-                    {
-                        files.Add(new ListItem(Path.GetFileName(path)));
-                    }
-                }
-                else if (fincaty == "quarterly")
-                {
-                    string[] filesPath = Directory.GetFiles(FINANCIALQR_PATH);
-                    foreach (string path in filesPath)
-                    {
-                        files.Add(new ListItem(Path.GetFileName(path)));
-                    }
-                }
-                else if (fincaty == "limitedreviewrpt")
-                {
-                    string[] filesPath = Directory.GetFiles(FINANCIALLRR_PATH);
-                    foreach (string path in filesPath)
-                    {
-                        files.Add(new ListItem(Path.GetFileName(path)));
-                    }
-                }
                 else if (fincaty == "subcompany")
                 {
-                    string[] filesPath = Directory.GetFiles(FINANCIALAGM_PATH);
+                    string[] filesPath = Directory.GetFiles(FINANCIALSUB_PATH);
                     foreach (string path in filesPath)
                     {
                         files.Add(new ListItem(Path.GetFileName(path)));
@@ -542,7 +426,7 @@ namespace Transwarranty_App.Controllers
             }
             else if (ReportType == "annual")
             {
-                if (annucaty == "annualtranswarranty")
+                if (annucaty == "transwarranty")
                 {
                     string[] filesPath = Directory.GetFiles(ANNUALTRAN_PATH);
                     foreach (string path in filesPath)
@@ -585,14 +469,6 @@ namespace Transwarranty_App.Controllers
                         files.Add(new ListItem(Path.GetFileName(path)));
                     }
                 }
-                else if (SubOption == "boardmeeting")
-                {
-                    string[] filesPath = Directory.GetFiles(BOARDMEETING_PATH);
-                    foreach (string path in filesPath)
-                    {
-                        files.Add(new ListItem(Path.GetFileName(path)));
-                    }
-                }
             }
             else if (ReportType == "stockexchange")
             {
@@ -602,9 +478,10 @@ namespace Transwarranty_App.Controllers
                     files.Add(new ListItem(Path.GetFileName(path)));
                 }
             }
-            else if (ReportType == "general")
+            else if (ReportType == "AgmAndEgm")
             {
-                string[] filesPath = Directory.GetFiles(AGM_PATH);
+                string AGMAndEGM_PATH = @"C:\TRANSWARRANTYREPORTS\AGM\" + year + "\\";
+                string[] filesPath = Directory.GetFiles(AGMAndEGM_PATH);
                 foreach (string path in filesPath)
                 {
                     files.Add(new ListItem(Path.GetFileName(path)));
@@ -656,7 +533,7 @@ namespace Transwarranty_App.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
 
         }
-        public JsonResult RemoveUploadedReports(string reportId, string type, string subOption, string Fincaty, string Annucaty)
+        public JsonResult RemoveUploadedReports(string reportId, string type, string subOption, string Fincaty, string Annucaty, string year)
         {
             try
             {
@@ -668,30 +545,18 @@ namespace Transwarranty_App.Controllers
 
                 if (ReportType == "financial")
                 {
-                    if (fincaty == "financial")
+                    if (fincaty == "transwarranty")
                     {
                         filePath = FINANCIAL_PATH + reportId;
                     }
-                    else if (fincaty == "annualfinancial")
-                    {
-                        filePath = FINANCIALAF_PATH + reportId;
-                    }
-                    else if (fincaty == "quarterly")
-                    {
-                        filePath = FINANCIALQR_PATH + reportId;
-                    }
-                    else if (fincaty == "limitedreviewrpt")
-                    {
-                        filePath = FINANCIALLRR_PATH + reportId;
-                    }
                     else if (fincaty == "subcompany")
                     {
-                        filePath = FINANCIALAGM_PATH + reportId;
+                        filePath = FINANCIALSUB_PATH + reportId;
                     }
                 }
                 else if (ReportType == "annual")
                 {
-                    if (annucaty == "annualtranswarranty")
+                    if (annucaty == "transwarranty")
                     {
                         filePath = ANNUALTRAN_PATH + reportId;
                     }
@@ -715,10 +580,6 @@ namespace Transwarranty_App.Controllers
                     {
                         filePath = SHAREHOLDING_PATH + reportId;
                     }
-                    else if (SubOption == "boardmeeting")
-                    {
-                        filePath = BOARDMEETING_PATH + reportId;
-                    }
                 }
                 else if (ReportType == "stockexchange")
                 {
@@ -728,9 +589,10 @@ namespace Transwarranty_App.Controllers
                 {
                     filePath = MATERIAL_PATH + reportId;
                 }
-                else if (ReportType == "general")
+                else if (ReportType == "AgmAndEgm")
                 {
-                    filePath = AGM_PATH + reportId;
+                    string AGMAndEGM_PATH = @"C:\TRANSWARRANTYREPORTS\AGM\" + year + "\\";
+                    filePath = AGMAndEGM_PATH + reportId;
                 }
                 else if (ReportType == "newspaperadvertisment")
                 {

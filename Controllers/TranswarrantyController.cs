@@ -15,7 +15,7 @@ namespace Transwarranty_website.Controllers
     public class TranswarrantyController : Controller
     {
         // GET: Transwarranty
-        public static string FINANCIAL_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\Financial\";
+        public static string FINANCIAL_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\";
         public static string FINANCIALAF_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\AnnualFinancial\";
         public static string FINANCIALAGM_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\AnnualGeneralMeeting\";
         public static string FINANCIALLRR_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\LimitedReviewReport\";
@@ -94,99 +94,69 @@ namespace Transwarranty_website.Controllers
             {
                 if (ReportType == "financial")
                 {
-                    if (SubOption == "financial")
+                    if (SubOption == "transwarranty")
                     {
-                        string[] filesPath = Directory.GetFiles(FINANCIAL_PATH);
-                        foreach (string path in filesPath)
+                        string FINTranswarranty_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\Transwarranty\" + ReportType + "_" + Pattern + "_" + Year + "_" + Period + ".pdf" + "";
+                        if (System.IO.File.Exists(FINTranswarranty_PATH))
                         {
-                            files.Add(new ListItem(Path.GetFileName(path)));
+                            files.Add(new ListItem(Path.GetFileName(FINTranswarranty_PATH)));
                         }
 
                     }
-                    else if (SubOption == "annualfinancial")
-                    {
-                        string[] filesPath = Directory.GetFiles(FINANCIALAF_PATH);
-                        foreach (string path in filesPath)
-                        {
-                            files.Add(new ListItem(Path.GetFileName(path)));
-                        }
-                    }
-                    else if (SubOption == "quarterly")
-                    {
-                        string[] filesPath = Directory.GetFiles(FINANCIALQR_PATH);
-                        foreach (string path in filesPath)
-                        {
-                            files.Add(new ListItem(Path.GetFileName(path)));
-                        }
-                    }
-                    else if (SubOption == "limitedreviewrpt")
-                    {
-                        string[] filesPath = Directory.GetFiles(FINANCIALLRR_PATH);
-                        foreach (string path in filesPath)
-                        {
-                            files.Add(new ListItem(Path.GetFileName(path)));
-                        }
-                    }
                     else if (SubOption == "subcompany")
                     {
-                        string[] filesPath = Directory.GetFiles(FINANCIALAGM_PATH);
-                        foreach (string path in filesPath)
+                        string FINSubCompany_PATH = @"C:\TRANSWARRANTYREPORTS\Financial\Subcompany\" + ReportType + "_" + Pattern + "_" + Year + "_" + Period + ".pdf" + "";
+                        if (System.IO.File.Exists(FINSubCompany_PATH))
                         {
-                            files.Add(new ListItem(Path.GetFileName(path)));
+                            files.Add(new ListItem(Path.GetFileName(FINSubCompany_PATH)));
                         }
+
                     }
                 }
                 else if (ReportType == "annual")
                 {
-                    if (Pattern == "annualtranswarranty")
+                    if (Pattern == "transwarranty")
                     {
-                        string[] filesPath = Directory.GetFiles(ANNUALTRAN_PATH);
-                        foreach (string path in filesPath)
+                        string ANNTranswarranty_PATH = @"C:\TRANSWARRANTYREPORTS\Annual\Transwarranty\" + ReportType + "_" + Pattern + "_" + Year + ".pdf" + "";
+                        if (System.IO.File.Exists(ANNTranswarranty_PATH))
                         {
-                            files.Add(new ListItem(Path.GetFileName(path)));
+                            files.Add(new ListItem(Path.GetFileName(ANNTranswarranty_PATH)));
                         }
                     }
                     else if (Pattern == "subcompany")
                     {
-                        string[] filesPath = Directory.GetFiles(ANNUALSUB_PATH);
-                        foreach (string path in filesPath)
+                        string ANNSubCompany_PATH = @"C:\TRANSWARRANTYREPORTS\Annual\Subcompany\" + ReportType + "_" + Pattern + "_" + Year + ".pdf" + "";
+                        if (System.IO.File.Exists(ANNSubCompany_PATH))
                         {
-                            files.Add(new ListItem(Path.GetFileName(path)));
+                            files.Add(new ListItem(Path.GetFileName(ANNSubCompany_PATH)));
                         }
+
                     }
                 }
                 else if (ReportType == "shareholder")
                 {
                     if (SubOption == "corporategovernance")
                     {
-                        string[] filesPath = Directory.GetFiles(SHARECG_PATH);
-                        foreach (string path in filesPath)
+                        string SHAGovernance_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\CorporateGovernance\" + ReportType + "_" + Pattern + "_" + Year + "_" + Period + ".pdf" + "";
+                        if (System.IO.File.Exists(SHAGovernance_PATH))
                         {
-                            files.Add(new ListItem(Path.GetFileName(path)));
+                            files.Add(new ListItem(Path.GetFileName(SHAGovernance_PATH)));
                         }
                     }
                     else if (SubOption == "investorcomplaints")
                     {
-                        string[] filesPath = Directory.GetFiles(SHAREIC_PATH);
-                        foreach (string path in filesPath)
+                        string SHAInvestor_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\InvestorComplaints\" + ReportType + "_" + Pattern + "_" + Year + "_" + Period + ".pdf" + "";
+                        if (System.IO.File.Exists(SHAInvestor_PATH))
                         {
-                            files.Add(new ListItem(Path.GetFileName(path)));
+                            files.Add(new ListItem(Path.GetFileName(SHAInvestor_PATH)));
                         }
                     }
                     else if (SubOption == "shareholdingpattern")
                     {
-                        string[] filesPath = Directory.GetFiles(SHAREHOLDING_PATH);
-                        foreach (string path in filesPath)
+                        string SHAShareHolding_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\ShareholdingPattern\" + ReportType + "_" + Pattern + "_" + Year + "_" + Period + ".pdf" + "";
+                        if (System.IO.File.Exists(SHAShareHolding_PATH))
                         {
-                            files.Add(new ListItem(Path.GetFileName(path)));
-                        }
-                    }
-                    else if (SubOption == "boardmeeting")
-                    {
-                        string[] filesPath = Directory.GetFiles(BOARDMEETING_PATH);
-                        foreach (string path in filesPath)
-                        {
-                            files.Add(new ListItem(Path.GetFileName(path)));
+                            files.Add(new ListItem(Path.GetFileName(SHAShareHolding_PATH)));
                         }
                     }
                 }
@@ -206,12 +176,16 @@ namespace Transwarranty_website.Controllers
                         files.Add(new ListItem(Path.GetFileName(path)));
                     }
                 }
-                else if (ReportType == "general")
+                else if (ReportType == "AgmAndEgm")
                 {
-                    string[] filesPath = Directory.GetFiles(AGM_PATH);
-                    foreach (string path in filesPath)
+                    string AgmAndEgm_PATH = @"C:\TRANSWARRANTYREPORTS\AGM\" + Year + "\\";
+                    string directoryName = Path.GetDirectoryName(AgmAndEgm_PATH);
+                    foreach (String filename in Directory.GetFiles(directoryName))
                     {
-                        files.Add(new ListItem(Path.GetFileName(path)));
+                        if (System.IO.File.Exists(filename))
+                        {
+                            files.Add(new ListItem(Path.GetFileName(filename)));
+                        }
                     }
                 }
                 else if (ReportType == "unclaimeddividend")
@@ -255,65 +229,46 @@ namespace Transwarranty_website.Controllers
             return Json(Result, JsonRequestBehavior.AllowGet);
 
         }
-        public FileResult DownloadPdf(string reportId, string type, string subOption)
+
+        public FileResult DownloadSinglePdf(string ReportType, string ReportName)
+        {
+            string path = "";
+            if (ReportType == "financial")
+            {
+                path = @"C:\TRANSWARRANTYREPORTS\Financial\Transwarranty\" + ReportName + "";
+            }
+            else if (ReportType == "subcompany")
+            {
+                path = @"C:\TRANSWARRANTYREPORTS\Financial\Subcompany\" + ReportName + "";
+            }
+            else if (ReportType == "corporategovernance")
+            {
+                path = @"C:\TRANSWARRANTYREPORTS\ShareHolder\CorporateGovernance\" + ReportName + "";
+            }
+            else if (ReportType == "investorcomplaints")
+            {
+                path = @"C:\TRANSWARRANTYREPORTS\ShareHolder\InvestorComplaints\" + ReportName + "";
+            }
+            else if (ReportType == "shareholdingpattern")
+            {
+                path = @"C:\TRANSWARRANTYREPORTS\ShareHolder\ShareholdingPattern\" + ReportName + "";
+            }
+            else if (ReportType == "annualtranswarranty")
+            {
+                path = @"C:\TRANSWARRANTYREPORTS\Annual\Transwarranty\" + ReportName + "";
+            }
+            else if (ReportType == "annualsubcompany")
+            {
+                path = @"C:\TRANSWARRANTYREPORTS\Annual\Subcompany\" + ReportName + "";
+            }
+
+            byte[] bytes = System.IO.File.ReadAllBytes(path);
+            return File(bytes, "application/octet-stream", ReportName + ".pdf");
+        }
+        public FileResult DownloadPdf(string reportId, string type, string year)
         {
             string Urlpath = "";
-            if (type == "financial")
-            {
-                if (subOption == "financial")
-                {
-                    Urlpath = FINANCIAL_PATH;
-
-                }
-                else if (subOption == "annualfinancial")
-                {
-                    Urlpath = FINANCIALAF_PATH;
-                }
-                else if (subOption == "quarterly")
-                {
-                    Urlpath = FINANCIALQR_PATH;
-                }
-                else if (subOption == "limitedreviewrpt")
-                {
-                    Urlpath = FINANCIALLRR_PATH;
-                }
-                else if (subOption == "subcompany")
-                {
-                    Urlpath = FINANCIALAGM_PATH;
-                }
-            }
-            else if (type == "annual")
-            {
-                if (subOption == "annualtranswarranty")
-                {
-                    Urlpath = ANNUALTRAN_PATH;
-                }
-                else if (subOption == "subcompany")
-                {
-                    Urlpath = ANNUALSUB_PATH;
-                }
-
-            }
-            else if (type == "shareholder")
-            {
-                if (subOption == "corporategovernance")
-                {
-                    Urlpath = SHARECG_PATH;
-                }
-                else if (subOption == "investorcomplaints")
-                {
-                    Urlpath = SHAREIC_PATH;
-                }
-                else if (subOption == "shareholdingpattern")
-                {
-                    Urlpath = SHAREHOLDING_PATH;
-                }
-                else if (subOption == "boardmeeting")
-                {
-                    Urlpath = BOARDMEETING_PATH;
-                }
-            }
-            else if (type == "stockexchange")
+            if (type == "stockexchange")
             {
                 Urlpath = EXCHANGE_PATH;
             }
@@ -321,9 +276,10 @@ namespace Transwarranty_website.Controllers
             {
                 Urlpath = MATERIAL_PATH;
             }
-            else if (type == "general")
+            else if (type == "AgmAndEgm")
             {
-                Urlpath = AGM_PATH;
+                string AgmAndEgm_PATH = @"C:\TRANSWARRANTYREPORTS\AGM\" + year + "\\";
+                Urlpath = AgmAndEgm_PATH;
             }
             else if (type == "unclaimeddividend")
             {

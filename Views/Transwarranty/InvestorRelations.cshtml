@@ -21,18 +21,17 @@
                     dataType: "json",
                     data: { ReportType: ReportType, Pattern: Pattern, Year: Year, Period: Period },
                     success: function (data) {
-                        //alert(JSON.stringify(data.lmodel));
+                        ////alert(JSON.stringify(data.lmodel));
                         //--- Year & Period values
                         if ((ReportType == "financial" && Pattern === 'transwarranty') || (ReportType == "financial" && Pattern === 'subcompany') || (ReportType == "shareholder" && Pattern === 'corporategovernance') || (ReportType == "shareholder" && Pattern === 'investorcomplaints') || (ReportType == "shareholder" && Pattern === 'shareholdingpattern'))
                         {
                             if (data.lmodel.length > 0) {
 
                                 $.each(data.lmodel, function (index, value) {
-
                                     //x.style.display = "block";
                                     $("#DivShowPdf").css('display', 'flex');
-                                    $('#Pdfviewer').val(value.ReportName);
-                                    $('#Pdfviewer').attr('name', value.ReportId);
+                                    $('#Pdfviewer').val(value.Value);
+                                    $('#Pdfviewer').attr('name', value.Value);
 
                                 });
                             } else {
@@ -64,15 +63,15 @@
                             }
                         }
                         //--- Year only values
-                        else if ((ReportType == "annual" && Pattern === 'annualtranswarranty') || (ReportType === 'stockexchange' && Pattern === 'subcompany')) {
+                        else if ((ReportType == "annual" && Pattern === 'transwarranty') || (ReportType === 'annual' && Pattern === 'subcompany')) {
                             if (data.lmodel.length > 0) {
 
                                 $.each(data.lmodel, function (index, value) {
 
                                     //x.style.display = "block";
                                     $("#DivARShowPdf").css('display', 'flex');
-                                    $('#ARPdfviewer').val(value.ReportName);
-                                    $('#ARPdfviewer').attr('name', value.ReportId);
+                                    $('#ARPdfviewer').val(value.Value);
+                                    $('#ARPdfviewer').attr('name', value.Value);
 
                                 });
                             } else {
@@ -124,78 +123,14 @@
             $("#AnnualRpt").css('display', 'none');
             $("#MultipleDiv").css('display', 'none');
 
-        $("#defaultOpen").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-            Pattern = 'transwarranty';
-            ReportType = 'financial';
-            var Year = $("#DdlYear").val();
-            var Period = $("#DdlQrtr").val();
-            AjaxCalls(ReportType, Pattern, Year, Period);
-        });
-        $("#BtnAnnualFin").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-            Pattern = 'transwarranty';
-            ReportType = 'financial';
-            var Year = $("#DdlYear").val();
-            var Period = $("#DdlQrtr").val();
-            AjaxCalls(ReportType, Pattern, Year, Period);
-        });
-        $("#Btnfsubcompany").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-            Pattern = 'subcompany';
-            ReportType = 'financial';
-            var Year = $("#DdlYear").val();
-            var Period = $("#DdlQrtr").val();
-            AjaxCalls(ReportType, Pattern, Year, Period);
-        });
-        $("#BtnShareholder").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-                Pattern = 'corporategovernance';
-                ReportType = 'shareholder';
-                var Year = $("#DdlYear").val();
-                var Period = $("#DdlQrtr").val();
-            AjaxCalls(ReportType, Pattern, Year, Period);
-        });
-        $("#BtnInvestor").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-            Pattern = 'investorcomplaints';
-            ReportType = 'shareholder';
-            var Year = $("#DdlYear").val();
-            var Period = $("#DdlQrtr").val();
-            AjaxCalls(ReportType, Pattern, Year, Period);
-        });
-        $("#BtnSHpattern").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-            Pattern = 'shareholdingpattern';
-            ReportType = 'shareholder';
-            var Year = $("#DdlYear").val();
-            var Period = $("#DdlQrtr").val();
-            AjaxCalls(ReportType, Pattern, Year, Period);
-        });
+
         $("#Btngeneral").click(function () {
             $('#AdvertisementsTbl').find('tbody').empty();
             Pattern = 'NA';
             ReportType = 'AgmAndEgm';
             var Year = $("#DdlYear").val();
             var Period = "NA";
-            AjaxCalls(ReportType, Pattern, Year, Period);
-        });
-        Search();
-        $("#BtnATrans").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-            var ReportType = "annual";
-            var Year = $("#DdlYear").val();
-            var Period = "NA";
-            var Pattern = "annualtranswarranty";
-            AjaxCalls(ReportType, Pattern, Year, Period);
-        });
-        $("#BtnASub").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-            var ReportType = "annual";
-            var Year = $("#DdlYear").val();
-            var Period = "NA";
-            var Pattern = "subcompany";
-            AjaxCalls(ReportType, Pattern, Year, Period);
+            //AjaxCalls(ReportType, Pattern, Year, Period);
         });
 
             $("#BtnExchange").click(function () {
@@ -245,12 +180,14 @@
         var result = $("#AdvertisementsTbl").find('tr:eq(' + index + ')').find('td:eq(1)').text();
             var ReportType = result.split('_')[0];
         var Sub_cat = result.split('_')[1];
+        var Year = $("#DdlAgmYear").val();
 
-        window.location = '/Transwarranty/DownloadPdf?reportId=' + result + "&type=" + ReportType + "&subOption=" + Sub_cat;
+        window.location = '/Transwarranty/DownloadPdf?reportId=' + result + "&type=" + ReportType + "&subOption=" + Sub_cat + "&year=" + Year;
     }
     function Search() {
 
-            var ReportType = $("#reportType_p").html();
+        var ReportType = $("#reportType_p").html();
+        var AnReportType = $("#reportType_AR").html();
             var Pattern = "NA"
             if (ReportType === 'financial') {
                 Pattern = 'transwarranty';
@@ -258,24 +195,63 @@
             }
             else if (ReportType === 'subcompany') {
                 Pattern = ReportType;
-                ReportType = 'shareholder';
+                ReportType = 'financial';
             }
             else if (ReportType === 'corporategovernance') {
                 Pattern = ReportType;
                 ReportType = 'shareholder';
             }
-            else if (ReportType === 'shareholderpattern') {
+            else if (ReportType === 'investorcomplaints') {
                 Pattern = ReportType;
                 ReportType = 'shareholder';
             }
+            else if (ReportType === 'shareholdingpattern') {
+                Pattern = ReportType;
+                ReportType = 'shareholder';
+            }
+            else if (AnReportType === 'annualtranswarranty') {
+                Pattern = ReportType;
+                ReportType = 'annual';
+            }
+            else if (AnReportType === 'annualsubcompany') {
+                Pattern = ReportType;
+                ReportType = 'annual';
+            }
             var Year = 'NA';
             var Period = 'NA';
-            if ((ReportType === 'financial') || (ReportType === 'shareholder' && Pattern === 'corporategovernance') || (ReportType === 'shareholder' && Pattern === 'investorcomplaints')) {
+            if ((ReportType === 'financial' && Pattern == 'transwarranty') || (ReportType === 'financial' && Pattern == 'subcompany') || (ReportType === 'shareholder' && Pattern === 'corporategovernance') || (ReportType === 'shareholder' && Pattern === 'investorcomplaints') || (ReportType === 'shareholder' && Pattern === 'shareholdingpattern')) {
                 Year = $("#DdlYear").val();
                 Period = $("#DdlQrtr").val();
             }
-
+            else if (ReportType === 'annual' && Pattern == 'annualtranswarranty') {
+                Pattern = "transwarranty";
+                Year = $("#DdlARYear").val();
+                Period = "NA";
+            }
+            else if (ReportType === 'annual' && Pattern == 'annualsubcompany') {
+                Pattern = "subcompany";
+                Year = $("#DdlARYear").val();
+                Period = "NA";
+            }
             AjaxCalls(ReportType, Pattern, Year, Period);
+    }
+    function downloadPDF() {
+        var ReportType = $("#reportType_p").html();
+        var ReportName = $("#Pdfviewer").val();
+        window.location = '/Transwarranty/DownloadSinglePdf?ReportType=' + ReportType + "&ReportName=" + ReportName;
+    }
+    function downloadAnnualPDF() {
+        var ReportType = $("#reportType_AR").html();
+        var ReportName = $("#ARPdfviewer").val();
+        window.location = '/Transwarranty/DownloadSinglePdf?ReportType=' + ReportType + "&ReportName=" + ReportName;
+    }
+    function SearchAgm() {
+        var ReportType = "AgmAndEgm";
+        var Year = $("#DdlAgmYear").val();
+        var Period = "NA";
+        var Pattern = "NA";
+
+        AjaxCalls(ReportType, Pattern, Year, Period);
     }
 </script>
 <script>
@@ -287,6 +263,9 @@
 
         $("#reportType_np").html(reportType);
         $("#report_nphead").html(hName);
+
+        $("#reportType_agm").html(reportType);
+        $("#report_agmhead").html(hName);
 
         $("#reportType_cd").html(reportType);
         $("#report_cdhead").html(hName);
@@ -310,23 +289,13 @@
             $("#InvContacts").css('display', 'none');
             $("#MultipleDiv").css('display', 'none');
         }
-        else if (reportType === 'meeting' || reportType === 'newspaperadvertisment' || reportType === 'materialevents' || reportType === 'investorrelations' || reportType === 'stockexchange') {
+        else if (reportType === 'newspaperadvertisment' || reportType === 'materialevents' || reportType === 'stockexchange' || reportType === 'unclaimeddividend' || reportType === 'policies') {
             $('#searchDiv').css('display', 'none');
             $("#CodeOfConduct").css('display', 'none');
             $("#InvContacts").css('display', 'none');
             $("#Composition").css('display', 'none');
             $("#AnnualRpt").css('display', 'none');
             $("#Advertisements").css('display', 'block');
-            $("#MultipleDiv").css('display', 'none');
-        }
-        else if (reportType === 'shareholdingpattern' || reportType === 'boardmeeting' || reportType === 'quarterly' || reportType === 'unclaimeddividend' || reportType === 'policies') {
-            $("#DivShowPdf").css('display', 'none');
-            $('#searchDiv').css('display', 'none');
-            $("#Advertisements").css('display', 'block');
-            $("#CodeOfConduct").css('display', 'none');
-            $("#InvContacts").css('display', 'none');
-            $("#Composition").css('display', 'none');
-            $("#AnnualRpt").css('display', 'none');
             $("#MultipleDiv").css('display', 'none');
         }
         else if (reportType === 'annualtranswarranty' || reportType === 'annualsubcompany') {
@@ -475,7 +444,7 @@
                                 <!----------------->
                                 <!--Search Button-->
                                 <div class="col-md-4" style="text-align:center;">
-                                    <button type="button" value="submit" class="btn btn-primary" id="Btnsearch" data-toggle="modal" data-target="#myModal">Search</button>
+                                    <button type="button" value="submit" class="btn btn-primary" id="Btnsearch" onclick="Search();" data-toggle="modal" data-target="#myModal">Search</button>
                                     <div id="msgSubmit" class="h3 text-center hidden"></div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -488,7 +457,7 @@
                                     <input type="text" id="Pdfviewer" class="form-control" style="height: 30px; width: 115%;" disabled="disabled">
                                 </div>
                                 <div class="col-md-4" style="text-align:center;padding-top:10px">
-                                    <button type="submit" id="DownloadFile" class="btn btn-primary" style="height: 30px; padding: 8px;">Download File</button>
+                                    <button type="submit" id="DownloadFile" class="btn btn-primary" onclick="downloadPDF();" style="height: 30px; padding: 8px;">Download File</button>
                                 </div>
                                 @* </div> *@
                             </div>
@@ -496,7 +465,6 @@
                         </div>
                     </div>
                     <!------------------------------->
-
                     <!--- Search With Year --->
                     <div id="AnnualRpt" style="width:100%" class="row visible">
                         <div class="col-md-12">
@@ -533,7 +501,7 @@
                                 </div>
                                 <!--Search Button-->
                                 <div class="col-md-4" style="text-align:center;">
-                                    <button type="button" value="submit" class="btn btn-primary" id="AnnualSrch" data-toggle="modal" data-target="#myModal">Search</button>
+                                    <button type="button" value="submit" class="btn btn-primary" id="AnnualSrch" onclick="Search();" data-toggle="modal" data-target="#myModal">Search</button>
                                     <div id="msgSubmit" class="h3 text-center hidden"></div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -545,7 +513,7 @@
                                     <input type="text" id="ARPdfviewer" class="form-control" style="height: 30px;" disabled="disabled">
                                 </div>
                                 <div class="col-md-4" style="text-align:center;padding-top:10px">
-                                    <button type="submit" id="ARDownloadFile" class="btn btn-primary" style="height: 30px; padding: 8px;">Download File</button>
+                                    <button type="submit" id="ARDownloadFile" class="btn btn-primary" onclick="downloadAnnualPDF();" style="height: 30px; padding: 8px;">Download File</button>
                                 </div>
                                 @* </div> *@
                             </div>
@@ -553,18 +521,17 @@
                         </div>
                     </div>
                     <!------------------------>
-
                     <!-- Search With Year and Show Multiple Datas -->
                     <div class="row">
                         <div id="MultipleDiv" class="col-md-12">
                             @*<div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">*@
-                            <h3 id="report_nphead" style="font-size : 19px !important;">News Paper Advertisements</h3>
-                            <p id="reportType_np" style="visibility:hidden"></p>
+                            <h3 id="report_agmhead" style="font-size : 19px !important;">AGM and EGM</h3>
+                            <p id="reportType_agm" style="visibility:hidden"></p>
                             <div class="row">
                                 <!--Dropdown-->
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <select class="form-control" id="DdlARYear" style="font-size:12px;">
+                                        <select class="form-control" id="DdlAgmYear" style="font-size:12px;">
                                             <option value="" selected="selected">Select Year</option>
                                             <option value="2010-11">2010-11</option>
                                             <option value="2011-12">2011-12</option>
@@ -589,7 +556,7 @@
                                 </div>
                                 <!--Search Button-->
                                 <div class="col-md-4" style="text-align:center;">
-                                    <button type="button" value="submit" class="btn btn-primary" id="AnnualSrch" data-toggle="modal" data-target="#myModal">Search</button>
+                                    <button type="button" value="submit" class="btn btn-primary" onclick="SearchAgm();" id="AgmSrch" data-toggle="modal" data-target="#myModal">Search</button>
                                     <div id="msgSubmit" class="h3 text-center hidden"></div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -615,13 +582,13 @@
                         </div>
                     </div>
                     <!------------------------------->
-
                     <!-- Search Without Parameters -->
                     <div class="row">
                         <div id="Advertisements" class="col-md-12">
-                            @*<div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">*@
-                            <h3 id="report_nphead" style="font-size : 19px !important;">News Paper Advertisements</h3>
-                            <p id="reportType_np" style="visibility:hidden"></p>
+                            <div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">
+                                <h3 id="report_nphead" style="font-size : 19px !important;">News Paper Advertisements</h3>
+                                <p id="reportType_np" style="visibility:hidden"></p>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <!--Data Table-->
@@ -643,7 +610,6 @@
                         </div>
                     </div>
                     <!------------------------------->
-
                     <!-- Investor Contacts -->
                     <div class="row">
                         <div id="InvContacts" class="col-md-12">
@@ -694,7 +660,6 @@
                         </div>
                     </div>
                     <!----------------------->
-
                     <!--Composition of Committees of Board-->
                     <div class="row">
                         <div id="Composition" class="col-md-12">
@@ -790,7 +755,6 @@
                         </div>
                     </div>
                     <!-------------------------------------->
-
                     @*<div class="row">
                             <div id="Conduct" class="tabcontent">
                                 <div style="margin:30px; margin-top:20px; padding:0px 0px 14px 0px;">

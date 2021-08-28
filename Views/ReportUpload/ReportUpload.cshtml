@@ -32,7 +32,7 @@
                                 @Html.DropDownList("RptType", new List<SelectListItem>{
                                        new SelectListItem{ Text="Financial Report", Value = "financial" },
                                        new SelectListItem{ Text="Annual Report", Value = "annual" },
-                                       new SelectListItem{ Text="AGM And EGM", Value = "general" },
+                                       new SelectListItem{ Text="AGM And EGM", Value = "AgmAndEgm" },
                                        new SelectListItem{ Text="ShareHolder Info", Value = "shareholder" },
                                        new SelectListItem{ Text="Other Filings with Stock Exchanges", Value = "stockexchange" },
                                        new SelectListItem{ Text="Material Events", Value = "materialevents" },
@@ -50,7 +50,6 @@
                                        new SelectListItem{ Text="Corporate Governance", Value = "corporategovernance" },
                                        new SelectListItem{ Text="Investor Complaints", Value = "investorcomplaints" },
                                        new SelectListItem{ Text="ShareHolding Pattern", Value = "shareholdingpattern" },
-                                       new SelectListItem{Text="Board Meeting",Value="boardmeeting"},
                                     }, new { @class = "wrapper-dropdown", onchange = "ReportType(); uploadedReports();" })
                                 </div>
                             </div>
@@ -60,7 +59,7 @@
                             <div class="value">
                                 <div class="input-group">
                                     @Html.DropDownList("AnnualPattern", new List<SelectListItem>{
-                                       new SelectListItem{ Text="Transwarranty Finance Ltd", Value = "annualtranswarranty" },
+                                       new SelectListItem{ Text="Transwarranty Finance Ltd", Value = "transwarranty" },
                                        new SelectListItem{ Text="Subsidiary Companies", Value = "subcompany" },
                                     }, new { @class = "wrapper-dropdown", onchange = "ReportType(); uploadedReports();" })
                                 </div>
@@ -71,11 +70,8 @@
                             <div class="value">
                                 <div class="input-group">
                                     @Html.DropDownList("FinancialPattern", new List<SelectListItem>{
-                                       new SelectListItem{ Text="Financial Report", Value = "financial" },
-                                       new SelectListItem{ Text="Annual Financial Results", Value = "annualfinancial" },
-                                       new SelectListItem{ Text="Quarterly Result", Value = "quarterly" },
-                                       new SelectListItem{Text="Limited Review Report",Value="limitedreviewrpt"},
-                                       new SelectListItem{Text="Subsidiary Companies",Value="subcompany"},
+                                       new SelectListItem{ Text="Transwarranty Finance Ltd", Value = "transwarranty" },
+                                       new SelectListItem{ Text="Subsidiary Companies", Value = "subcompany" },
                                     }, new { @class = "wrapper-dropdown", onchange = "ReportType(); uploadedReports();" })
                                 </div>
                             </div>
