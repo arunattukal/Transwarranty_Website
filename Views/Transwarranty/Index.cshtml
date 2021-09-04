@@ -11,7 +11,7 @@
         <div class="item item-1">
             <div class="img-fill">
                 <div class="text-content">
-                    
+
                     <h4>Wisdom Insights<br>Strategy Experience</h4>
                     <p>Governed by eminent legal & finance professionals on the Board and is managed by experienced professionals</p>
                     <a href="@Url.Action("Services","Transwarranty")" class="filled-button">Our Services</a>
@@ -23,7 +23,7 @@
         <div class="item item-2">
             <div class="img-fill">
                 <div class="text-content">
-                   
+
                     <h4>Full Service<br>Investment Bank</h4>
                     <p>Transwarranty Finance is a leading Indian Financial Services company servicing a large number of companies in India</p>
                     <a href="@Url.Action("contact","Transwarranty")" class="filled-button">Contact Us</a>
@@ -35,7 +35,7 @@
         <div class="item item-3">
             <div class="img-fill">
                 <div class="text-content">
-                    
+
                     <h4>Broking / Distribution<br>&amp; Merchant Banking</h4>
                     <p>Performance oriented culture with ethics & values and objective of being a socially relevant company.</p>
                     <a href="@Url.Action("Aboutus","Transwarranty")" class="filled-button">learn more</a>
@@ -307,7 +307,7 @@
             </div>
         </div>
     </div>
-</div>        
+</div>
 
 <div class="callback-form">
     <div class="container">
@@ -344,7 +344,7 @@
                             </div>
                             <div class="col-lg-12">
                                 <fieldset>
-                                    <button type="submit" id="form-submit" class="border-button">Send Message</button>
+                                    <button type="submit" id="form-submit" onclick="SendEmail();" class="border-button">Send Message</button>
                                 </fieldset>
                             </div>
                         </div>
@@ -361,11 +361,13 @@
             <div class="col-md-12">
                 <div class="owl-partners owl-carousel">
 
-                   
+
 
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/Swal/sweetalert.min.js"></script>
+<script src="~/TranswarrantyJS/Transwarranty_JS.js"></script>

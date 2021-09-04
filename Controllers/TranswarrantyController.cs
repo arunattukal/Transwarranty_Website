@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -26,12 +28,12 @@ namespace Transwarranty_website.Controllers
         public static string SHARECG_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\CorporateGovernance\";
         public static string SHAREIC_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\Investorcomplaints\";
         public static string SHAREHOLDING_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\ShareHoldingPattern\";
-        public static string BOARDMEETING_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\";
+        //public static string BOARDMEETING_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\";
         public static string GRIEVANCE_PATH = @"C:\TRANSWARRANTYREPORTS\Grievances\";
         public static string POLICIES_PATH = @"C:\TRANSWARRANTYREPORTS\Policies\";
-        public static string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\";
-        public static string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\";
-        public static string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\";
+        //public static string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\";
+        //public static string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\";
+        //public static string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\";
         public static string UNCLAIM_PATH = @"C:\TRANSWARRANTYREPORTS\UnclaimedDividend\";
         public ActionResult Index()
         {
@@ -53,7 +55,42 @@ namespace Transwarranty_website.Controllers
 
             return View();
         }
-
+        //--################### Send Mail ,,
+        //--################### 03-September-2021 ,,
+        public JsonResult SendMail(string Name, string Email, string Subject, string Message)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                byte[] bytes = memoryStream.ToArray();
+                MailMessage mm = new MailMessage("help@transwarranty.com", "nikhilmu96@vertexbroking.com");
+                mm.Subject = Subject;
+                //StringBuilder sb = new StringBuilder();
+                //sb.AppendLine("Name: " + Name);
+                //sb.AppendLine("Email: " + Email);
+                //sb.AppendLine("Subject: " + Subject);
+                //sb.AppendLine("Message: " + Message);
+                string sName = "Name:" + Name + "";
+                string sEmail = "Email:" + Email + "";
+                string sSubject = "Subject:" + Subject + "";
+                string sMessage = "Message:" + Message + "";
+                string Body = sName + "\n" + sEmail + "\n" + sSubject + "\n" + sMessage;
+                mm.Body = Body;
+                mm.IsBodyHtml = false;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.rediffmailpro.com";
+                smtp.EnableSsl = true;
+                NetworkCredential NetworkCred = new NetworkCredential();
+                NetworkCred.UserName = "help@transwarranty.com";
+                NetworkCred.Password = "01012011";
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = NetworkCred;
+                smtp.Port = 587;
+                smtp.Send(mm);
+            }
+            var Result = new { Status = "Success"};
+            return Json(Result, JsonRequestBehavior.AllowGet);
+        }
+        //--########################################
         public ActionResult Services()
         {
 
@@ -159,9 +196,19 @@ namespace Transwarranty_website.Controllers
                             files.Add(new ListItem(Path.GetFileName(SHAShareHolding_PATH)));
                         }
                     }
+                    else if (SubOption == "boardmeeting")
+                    {
+                        string SHABoardMeeting_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\" + Year + "\\";
+                        string[] filesPath = Directory.GetFiles(SHABoardMeeting_PATH);
+                        foreach (string path in filesPath)
+                        {
+                            files.Add(new ListItem(Path.GetFileName(path)));
+                        }
+                    }
                 }
                 else if (ReportType == "stockexchange")
                 {
+                    string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\" + Year + "\\";
                     string[] filesPath = Directory.GetFiles(EXCHANGE_PATH);
                     foreach (string path in filesPath)
                     {
@@ -170,6 +217,7 @@ namespace Transwarranty_website.Controllers
                 }
                 else if (ReportType == "materialevents")
                 {
+                    string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\" + Year + "\\";
                     string[] filesPath = Directory.GetFiles(MATERIAL_PATH);
                     foreach (string path in filesPath)
                     {
@@ -206,6 +254,7 @@ namespace Transwarranty_website.Controllers
                 }
                 else if (ReportType == "newspaperadvertisment")
                 {
+                    string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\" + Year + "\\";
                     string[] filesPath = Directory.GetFiles(ADVERTISMENT_PATH);
                     foreach (string path in filesPath)
                     {
@@ -265,15 +314,17 @@ namespace Transwarranty_website.Controllers
             byte[] bytes = System.IO.File.ReadAllBytes(path);
             return File(bytes, "application/octet-stream", ReportName + ".pdf");
         }
-        public FileResult DownloadPdf(string reportId, string type, string year)
+        public FileResult DownloadPdf(string reportId, string type, string subOption, string year)
         {
             string Urlpath = "";
             if (type == "stockexchange")
             {
+                string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\" + year + "\\";
                 Urlpath = EXCHANGE_PATH;
             }
             else if (type == "materialevents")
             {
+                string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\" + year + "\\";
                 Urlpath = MATERIAL_PATH;
             }
             else if (type == "AgmAndEgm")
@@ -287,6 +338,7 @@ namespace Transwarranty_website.Controllers
             }
             else if (type == "newspaperadvertisment")
             {
+                string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\" + year + "\\";
                 Urlpath = ADVERTISMENT_PATH;
             }
             else if (type == "policies")
@@ -296,6 +348,14 @@ namespace Transwarranty_website.Controllers
             else if (type == "grievances")
             {
                 Urlpath = GRIEVANCE_PATH;
+            }
+            else if (type == "shareholder")
+            {
+                if (subOption == "boardmeeting")
+                {
+                    string SHABoardMeeting_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\" + year + "\\";
+                    Urlpath = SHABoardMeeting_PATH;
+                }
             }
 
             string path = Urlpath + reportId;

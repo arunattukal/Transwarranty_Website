@@ -282,14 +282,17 @@
     <Content Include="bin\Transwarranty_website.dll.config" />
     <None Include="img\TFL_logo4.png1" />
     <None Include="img\TFL_logo4.png2" />
+    <Content Include="Robots.txt" />
     <Content Include="Scripts\accordions.js" />
     <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\owl.js" />
     <Content Include="Scripts\slick.js" />
     <Content Include="Scripts\Swal\sweetalert.min.js" />
+    <Content Include="sitemap.xml" />
     <Content Include="TranswarrantyJS\Login_JS.js" />
     <Content Include="TranswarrantyJS\ReportUpload.js" />
+    <Content Include="TranswarrantyJS\Transwarranty_JS.js" />
     <Content Include="vendor\bootstrap\css\bootstrap.css" />
     <Content Include="vendor\bootstrap\css\bootstrap.min.css" />
     <Content Include="vendor\bootstrap\js\bootstrap.bundle.js" />

@@ -9,7 +9,11 @@
 <!--Scripts-->
 <script src="~/Scripts/jquery.min.js"></script>
 <script src="~/Scripts/Swal/sweetalert.min.js"></script>
-
+<style>
+    .show {
+        display: block;
+    }
+</style>
 
 <script>
 
@@ -41,7 +45,7 @@
                             }
                         }
                         //--- Without parameter values
-                        else if ((ReportType == "newspaperadvertisment") || (ReportType === 'stockexchange') || (ReportType === 'materialevents') || (ReportType == "unclaimeddividend") || (ReportType == "policies")) {
+                        else if ((ReportType == "unclaimeddividend") || (ReportType == "policies")) {
 
                             if (data.lmodel.length > 0) {
                                 $("#AdvertisementsTbl").css('display', 'inline-table');
@@ -80,7 +84,7 @@
                                 $("#DivARShowPdf").css('display', 'none');
                             }
                         }
-                        else if (ReportType == "AgmAndEgm") {
+                        else if ((ReportType == "newspaperadvertisment") || (ReportType === 'stockexchange') || (ReportType === 'materialevents') || (ReportType == "AgmAndEgm") || (ReportType == "shareholder" && Pattern == "boardmeeting")) {
                             if (data.lmodel.length > 0) {
 
                                 $("#AdvertisementsTbl").css('display', 'inline-table');
@@ -124,38 +128,20 @@
             $("#MultipleDiv").css('display', 'none');
 
 
-        $("#Btngeneral").click(function () {
-            $('#AdvertisementsTbl').find('tbody').empty();
-            Pattern = 'NA';
-            ReportType = 'AgmAndEgm';
-            var Year = $("#DdlYear").val();
-            var Period = "NA";
-            //AjaxCalls(ReportType, Pattern, Year, Period);
-        });
-
             $("#BtnExchange").click(function () {
-                $('#AdvertisementsTbl').find('tbody').empty();
-                var ReportType = "stockexchange";
-                var Pattern = "NA";
-                var Year = "NA";
-                var Period = "NA";
-                AjaxCalls(ReportType, Pattern, Year, Period);
+                $("#AdvertisementsTbl").css('display', 'none');
             });
             $("#BtnMaterial").click(function () {
-                $('#AdvertisementsTbl').find('tbody').empty();
-                var ReportType = "materialevents";
-                var Pattern = "NA";
-                var Year = "NA";
-                var Period = "NA";
-                AjaxCalls(ReportType, Pattern, Year, Period);
+                $("#AdvertisementsTbl").css('display', 'none');
             });
             $("#BtnNewspaper").click(function () {
-                $('#AdvertisementsTbl').find('tbody').empty();
-                var ReportType = "newspaperadvertisment";
-                var Pattern = "NA";
-                var Year = "NA";
-                var Period = "NA";
-                AjaxCalls(ReportType, Pattern, Year, Period);
+                $("#AdvertisementsTbl").css('display', 'none');
+            });
+            $("#Btngeneral").click(function () {
+                $("#AdvertisementsTbl").css('display', 'none');
+            });
+            $("#BtnBroad").click(function () {
+                $("#AdvertisementsTbl").css('display', 'none');
             });
             $("#Btnunclaimed").click(function () {
                 $('#AdvertisementsTbl').find('tbody').empty();
@@ -246,11 +232,38 @@
         window.location = '/Transwarranty/DownloadSinglePdf?ReportType=' + ReportType + "&ReportName=" + ReportName;
     }
     function SearchAgm() {
-        var ReportType = "AgmAndEgm";
-        var Year = $("#DdlAgmYear").val();
-        var Period = "NA";
-        var Pattern = "NA";
+        var Type = $("#reportType_agm").html();
 
+        if (Type == "general") {
+            var ReportType = "AgmAndEgm";
+            var Year = $("#DdlAgmYear").val();
+            var Period = "NA";
+            var Pattern = "NA";
+        }
+        else if (Type == "newspaperadvertisment") {
+            var ReportType = "newspaperadvertisment";
+            var Year = $("#DdlAgmYear").val();
+            var Period = "NA";
+            var Pattern = "NA";
+        }
+        else if (Type == "materialevents") {
+            var ReportType = "materialevents";
+            var Year = $("#DdlAgmYear").val();
+            var Period = "NA";
+            var Pattern = "NA";
+        }
+        else if (Type == "stockexchange") {
+            var ReportType = "stockexchange";
+            var Year = $("#DdlAgmYear").val();
+            var Period = "NA";
+            var Pattern = "NA";
+        }
+        else if (Type == "boardmeeting") {
+            var ReportType = "shareholder";
+            var Year = $("#DdlAgmYear").val();
+            var Period = "NA";
+            var Pattern = "boardmeeting";
+        }
         AjaxCalls(ReportType, Pattern, Year, Period);
     }
 </script>
@@ -289,7 +302,7 @@
             $("#InvContacts").css('display', 'none');
             $("#MultipleDiv").css('display', 'none');
         }
-        else if (reportType === 'newspaperadvertisment' || reportType === 'materialevents' || reportType === 'stockexchange' || reportType === 'unclaimeddividend' || reportType === 'policies') {
+        else if (reportType === 'unclaimeddividend' || reportType === 'policies') {
             $('#searchDiv').css('display', 'none');
             $("#CodeOfConduct").css('display', 'none');
             $("#InvContacts").css('display', 'none');
@@ -308,7 +321,7 @@
             $("#InvContacts").css('display', 'none');
             $("#MultipleDiv").css('display', 'none');
         }
-        else if (reportType === 'general') {
+        else if (reportType === 'general' || reportType === 'newspaperadvertisment' || reportType === 'materialevents' || reportType === 'stockexchange' || reportType === 'boardmeeting') {
             $("#DivShowPdf").css('display', 'none');
             $('#searchDiv').css('display', 'none');
             $("#Advertisements").css('display', 'none');
@@ -339,17 +352,19 @@
             $("#MultipleDiv").css('display', 'none');
         }
     }
-    function FinFunction() {
-        document.getElementById("FinDropdown").classList.toggle("show");
-    }
-    function AnnualFunction() {
-        document.getElementById("AnDropdown").classList.toggle("show");
-    }
-    function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
 
+    document.addEventListener("click", function (event) {
+        // Loop over all the menus
+        document.querySelectorAll(".dropdown-content").forEach(function (dd) {
+            dd.classList.remove("show"); // Hide the menu
+        });
 
+        // If the clicked element was a button
+        if (event.target.classList.contains('dropbtn')) {
+            // Show just the menu that corresponds to the clicked button
+            event.target.nextElementSibling.classList.toggle("show");
+        }
+    });
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {
         if (!event.target.matches('.dropbtn')) {
@@ -771,14 +786,14 @@
                                 <div class="tab">
                                     <ul class="pricing-features">
                                         <div class="dropdown">
-                                            <button class="tablinks dropbtn" onclick="displayDiv('financial', 'Transwarranty Finance Ltd'), FinFunction();" id="defaultOpen">Financial Results</button>
+                                            <button class="tablinks dropbtn" onclick="displayDiv('financial', 'Transwarranty Finance Ltd');" id="defaultOpen">Financial Results</button>
                                             <div id="FinDropdown" class="dropdown-content">
                                                 <button id="BtnAnnualFin" class="tablinks" onclick="displayDiv('financial', 'Transwarranty Finance Ltd')">Transwarranty Finance Ltd</button>
                                                 <button id="Btnfsubcompany" class="tablinks" onclick="displayDiv('subcompany', 'Subsidiary Companies')">Subsidiary Companies</button>
                                             </div>
                                         </div>
                                         <div class="dropdown">
-                                            <button id="BtnAnnual" class="tablinks dropbtn" onclick="displayDiv('annualtranswarranty', 'Transwarranty Finance Ltd'), AnnualFunction();">Annual Report</button>
+                                            <button id="BtnAnnual" class="tablinks dropbtn" onclick="displayDiv('annualtranswarranty', 'Transwarranty Finance Ltd');">Annual Report</button>
                                             <div id="AnDropdown" class="dropdown-content">
                                                 <button id="BtnATrans" class="tablinks" onclick="displayDiv('annualtranswarranty', 'Transwarranty Finance Ltd')">Transwarranty Finance Ltd</button>
                                                 <button id="BtnASub" class="tablinks" onclick="displayDiv('annualsubcompany', 'Subsidiary Companies')">Subsidiary Companies</button>
@@ -788,12 +803,12 @@
                                             <button id="Btngeneral" class="tablinks" onclick="displayDiv('general', 'AGM & EGM')">AGM & EGM</button>
                                         </div>
                                         <div class="dropdown">
-                                            <button id="BtnShareholder" class="tablinks dropbtn" onclick="displayDiv('corporategovernance', 'Corporate Governance'), myFunction();">Shareholder Information</button>
+                                            <button id="BtnShareholder" class="tablinks dropbtn" onclick="displayDiv('corporategovernance', 'Corporate Governance')">Shareholder Information</button>
                                             <div id="myDropdown" class="dropdown-content">
                                                 <button id="BtnGovernance" class="tablinks" onclick="displayDiv('corporategovernance', 'Corporate Governance')">Corporate Governance</button>
                                                 <button id="BtnInvestor" class="tablinks" onclick="displayDiv('investorcomplaints', 'Investor Complaints')">Investor Complaints</button>
                                                 <button id="BtnSHpattern" class="tablinks" onclick="displayDiv('shareholdingpattern', 'Shareholding Pattern')">Shareholding Pattern</button>
-                                                <!--<button id="BtnBroad" class="tablinks" onclick="displayDiv('boardmeeting', 'Board Meeting')">Board Meeting</button>-->
+                                                <button id="BtnBroad" class="tablinks" onclick="displayDiv('boardmeeting', 'Board Meeting')">Board Meeting</button>
                                             </div>
                                         </div>
                                         <div class="dropdown">

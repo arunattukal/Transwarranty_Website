@@ -54,11 +54,19 @@ function ReportType() {
             $("#div_Period").show();
             $("#div_Annual").hide();
         }
+        else if (Sub_cat == "boardmeeting") {
+            $("#div_SharePattern").show();
+            $("#div_FinPattern").hide();
+            $("#div_Year").show();
+            $("#div_RptCaption").show();
+            $("#div_Period").hide();
+            $("#div_Annual").hide();
+        }
     }
     else if (ReportType == "stockexchange") {
         $("#div_SharePattern").hide();
         $("#div_FinPattern").hide();
-        $("#div_Year").hide();
+        $("#div_Year").show();
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
@@ -66,7 +74,7 @@ function ReportType() {
     else if (ReportType == "materialevents") {
         $("#div_SharePattern").hide();
         $("#div_FinPattern").hide();
-        $("#div_Year").hide();
+        $("#div_Year").show();
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
@@ -98,7 +106,7 @@ function ReportType() {
     else if (ReportType == "newspaperadvertisment") {
         $("#div_SharePattern").hide();
         $("#div_FinPattern").hide();
-        $("#div_Year").hide();
+        $("#div_Year").show();
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
@@ -170,7 +178,9 @@ function Upload() {
 
     }
 }
-
+$('#Year').change(function () {
+    uploadedReports();
+});
 function uploadedReports() {
     $('#tbl_reports').find('tbody').empty();
     var ReportType = $("#RptType").val();

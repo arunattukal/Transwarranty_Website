@@ -22,9 +22,9 @@ namespace Transwarranty_App.Controllers
         public static string SHAREHOLDING_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\ShareHoldingPattern\";
         public static string GRIEVANCE_PATH = @"C:\TRANSWARRANTYREPORTS\Grievances\";
         public static string POLICIES_PATH = @"C:\TRANSWARRANTYREPORTS\Policies\";
-        public static string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\";
-        public static string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\";
-        public static string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\";
+        //public static string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\";
+        //public static string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\";
+        //public static string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\";
         public static string UNCLAIM_PATH = @"C:\TRANSWARRANTYREPORTS\UnclaimedDividend\";
         public ActionResult ReportUpload()
         {
@@ -48,7 +48,8 @@ namespace Transwarranty_App.Controllers
                 Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                 if (reporttype.Equals("stockexchange"))
                 {
-                    ReportID = formData["ReportType"] + "_" + unixTimestamp;
+                    string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\" + year + "\\";
+                    ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -72,7 +73,8 @@ namespace Transwarranty_App.Controllers
                 }
                 else if (formData["ReportType"].Equals("materialevents"))
                 {
-                    ReportID = formData["ReportType"] + "_" + unixTimestamp;
+                    string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\" + year + "\\";
+                    ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -168,7 +170,8 @@ namespace Transwarranty_App.Controllers
                 }
                 else if (formData["ReportType"].Equals("newspaperadvertisment"))
                 {
-                    ReportID = formData["ReportType"] + "_" + unixTimestamp;
+                    string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\" + year + "\\";
+                    ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -196,19 +199,19 @@ namespace Transwarranty_App.Controllers
                     ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     quarter = "NA";
 
-                    string materialeventsfilename = ReportID + ".pdf";
-                    string materialeventsfilePath = AGMAndEGM_PATH + materialeventsfilename;
+                    string AGMAndEGMfilename = ReportID + ".pdf";
+                    string AGMAndEGMfilePath = AGMAndEGM_PATH + AGMAndEGMfilename;
 
                     byte[] bytes = Convert.FromBase64String(fileContent);
 
                     //check is file exists
-                    if (System.IO.File.Exists(materialeventsfilePath))
+                    if (System.IO.File.Exists(AGMAndEGMfilePath))
                     {
-                        System.IO.File.SetAttributes(materialeventsfilePath, FileAttributes.Normal);
-                        System.IO.File.Delete(materialeventsfilePath);
+                        System.IO.File.SetAttributes(AGMAndEGMfilePath, FileAttributes.Normal);
+                        System.IO.File.Delete(AGMAndEGMfilePath);
                         status = "Error";
                     }
-                    System.IO.FileStream stream = new FileStream(materialeventsfilePath, FileMode.CreateNew);
+                    System.IO.FileStream stream = new FileStream(AGMAndEGMfilePath, FileMode.CreateNew);
                     System.IO.BinaryWriter writer =
                     new BinaryWriter(stream);
                     writer.Write(bytes, 0, bytes.Length);
@@ -387,6 +390,29 @@ namespace Transwarranty_App.Controllers
                         writer.Write(bytes, 0, bytes.Length);
                         writer.Close();
                     }
+                    else if (subcategory.Equals("boardmeeting"))
+                    {
+                        string SHABoardMeeting_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\" + year + "\\";
+                        ReportID = formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + unixTimestamp;
+
+                        string BoardMeeting_PATHfilename = ReportID + ".pdf";
+                        string BoardMeeting_PATHfilePath = SHABoardMeeting_PATH + BoardMeeting_PATHfilename;
+
+                        byte[] bytes = Convert.FromBase64String(fileContent);
+
+                        //check is file exists
+                        if (System.IO.File.Exists(BoardMeeting_PATHfilePath))
+                        {
+                            System.IO.File.SetAttributes(BoardMeeting_PATHfilePath, FileAttributes.Normal);
+                            System.IO.File.Delete(BoardMeeting_PATHfilePath);
+                            status = "Error";
+                        }
+                        System.IO.FileStream stream = new FileStream(BoardMeeting_PATHfilePath, FileMode.CreateNew);
+                        System.IO.BinaryWriter writer =
+                        new BinaryWriter(stream);
+                        writer.Write(bytes, 0, bytes.Length);
+                        writer.Close();
+                    }
                 }
             }
             catch (Exception ex)
@@ -469,9 +495,19 @@ namespace Transwarranty_App.Controllers
                         files.Add(new ListItem(Path.GetFileName(path)));
                     }
                 }
+                else if (SubOption == "boardmeeting")
+                {
+                    string SHABoardMeeting_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\" + year + "\\";
+                    string[] filesPath = Directory.GetFiles(SHABoardMeeting_PATH);
+                    foreach (string path in filesPath)
+                    {
+                        files.Add(new ListItem(Path.GetFileName(path)));
+                    }
+                }
             }
             else if (ReportType == "stockexchange")
             {
+                string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\" + year + "\\";
                 string[] filesPath = Directory.GetFiles(EXCHANGE_PATH);
                 foreach (string path in filesPath)
                 {
@@ -489,6 +525,7 @@ namespace Transwarranty_App.Controllers
             }
             else if (ReportType == "materialevents")
             {
+                string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\" + year + "\\";
                 string[] filesPath = Directory.GetFiles(MATERIAL_PATH);
                 foreach (string path in filesPath)
                 {
@@ -497,6 +534,7 @@ namespace Transwarranty_App.Controllers
             }
             else if (ReportType == "newspaperadvertisment")
             {
+                string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\" + year + "\\";
                 string[] filesPath = Directory.GetFiles(ADVERTISMENT_PATH);
                 foreach (string path in filesPath)
                 {
@@ -580,13 +618,20 @@ namespace Transwarranty_App.Controllers
                     {
                         filePath = SHAREHOLDING_PATH + reportId;
                     }
+                    else if (SubOption == "boardmeeting")
+                    {
+                        string SHABoardMeeting_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\" + year + "\\";
+                        filePath = SHABoardMeeting_PATH + reportId;
+                    }
                 }
                 else if (ReportType == "stockexchange")
                 {
+                    string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\" + year + "\\";
                     filePath = EXCHANGE_PATH + reportId;
                 }
                 else if (ReportType == "materialevents")
                 {
+                    string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\" + year + "\\";
                     filePath = MATERIAL_PATH + reportId;
                 }
                 else if (ReportType == "AgmAndEgm")
@@ -596,6 +641,7 @@ namespace Transwarranty_App.Controllers
                 }
                 else if (ReportType == "newspaperadvertisment")
                 {
+                    string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\" + year + "\\";
                     filePath = ADVERTISMENT_PATH + reportId;
                 }
                 else if (ReportType == "unclaimeddividend")
