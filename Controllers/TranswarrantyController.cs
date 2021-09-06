@@ -62,7 +62,7 @@ namespace Transwarranty_website.Controllers
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 byte[] bytes = memoryStream.ToArray();
-                MailMessage mm = new MailMessage("help@transwarranty.com", "nikhilmu96@vertexbroking.com");
+                MailMessage mm = new MailMessage("help@transwarranty.com", "mail@transwarranty.com");
                 mm.Subject = Subject;
                 //StringBuilder sb = new StringBuilder();
                 //sb.AppendLine("Name: " + Name);
