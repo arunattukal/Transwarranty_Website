@@ -480,9 +480,15 @@ h6 {
     border-style: solid;
     border-color: #4cbeff transparent;
 }
+.width {
+    width: 412px !important;
+}
 @media (max-width: 767px) {
     .wrapper-dropdown {
         width: 335px;
+    }
+    .width {
+        width: 328px !important;
     }
 }
 /* ==========================================================================

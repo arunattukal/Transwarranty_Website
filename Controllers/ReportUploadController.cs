@@ -45,11 +45,12 @@ namespace Transwarranty_App.Controllers
                 string AnnType = formData["Annual_Sub"].ToString();
                 string year = formData["Year"].ToString();
                 string quarter = formData["Quarter"].ToString();
+                string ReportName = formData["Report_Name"].ToString();
                 Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                 if (reporttype.Equals("stockexchange"))
                 {
                     string EXCHANGE_PATH = @"C:\TRANSWARRANTYREPORTS\StockExchange\" + year + "\\";
-                    ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
+                    ReportID = ReportName + "_" + formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -74,7 +75,7 @@ namespace Transwarranty_App.Controllers
                 else if (formData["ReportType"].Equals("materialevents"))
                 {
                     string MATERIAL_PATH = @"C:\TRANSWARRANTYREPORTS\MaterialEvents\" + year + "\\";
-                    ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
+                    ReportID = ReportName + "_" + formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -98,7 +99,7 @@ namespace Transwarranty_App.Controllers
                 }
                 else if (formData["ReportType"].Equals("unclaimeddividend"))
                 {
-                    ReportID = formData["ReportType"] + "_" + unixTimestamp;
+                    ReportID = ReportName + "_" + formData["ReportType"] + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -122,7 +123,7 @@ namespace Transwarranty_App.Controllers
                 }
                 else if (formData["ReportType"].Equals("policies"))
                 {
-                    ReportID = formData["ReportType"] + "_" + unixTimestamp;
+                    ReportID = ReportName + "_" + formData["ReportType"] + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -146,7 +147,7 @@ namespace Transwarranty_App.Controllers
                 }
                 else if (formData["ReportType"].Equals("grievances"))
                 {
-                    ReportID = formData["ReportType"] + "_" + unixTimestamp;
+                    ReportID = ReportName + "_" + formData["ReportType"] + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -171,7 +172,7 @@ namespace Transwarranty_App.Controllers
                 else if (formData["ReportType"].Equals("newspaperadvertisment"))
                 {
                     string ADVERTISMENT_PATH = @"C:\TRANSWARRANTYREPORTS\Advertisment\" + year + "\\";
-                    ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
+                    ReportID = ReportName + "_" + formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     year = "NA";
                     quarter = "NA";
 
@@ -196,7 +197,7 @@ namespace Transwarranty_App.Controllers
                 else if (formData["ReportType"].Equals("AgmAndEgm"))
                 {
                     string AGMAndEGM_PATH = @"C:\TRANSWARRANTYREPORTS\AGM\" + year + "\\";
-                    ReportID = formData["ReportType"] + "_" + year + "_" + unixTimestamp;
+                    ReportID = ReportName + "_" + formData["ReportType"] + "_" + year + "_" + unixTimestamp;
                     quarter = "NA";
 
                     string AGMAndEGMfilename = ReportID + ".pdf";
@@ -393,7 +394,7 @@ namespace Transwarranty_App.Controllers
                     else if (subcategory.Equals("boardmeeting"))
                     {
                         string SHABoardMeeting_PATH = @"C:\TRANSWARRANTYREPORTS\ShareHolder\BoardMeeting\" + year + "\\";
-                        ReportID = formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + unixTimestamp;
+                        ReportID = ReportName + "_" + formData["ReportType"] + "_" + subcategory + "_" + formData["Year"] + "_" + unixTimestamp;
 
                         string BoardMeeting_PATHfilename = ReportID + ".pdf";
                         string BoardMeeting_PATHfilePath = SHABoardMeeting_PATH + BoardMeeting_PATHfilename;

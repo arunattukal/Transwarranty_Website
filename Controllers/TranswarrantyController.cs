@@ -64,11 +64,6 @@ namespace Transwarranty_website.Controllers
                 byte[] bytes = memoryStream.ToArray();
                 MailMessage mm = new MailMessage("help@transwarranty.com", "mail@transwarranty.com");
                 mm.Subject = Subject;
-                //StringBuilder sb = new StringBuilder();
-                //sb.AppendLine("Name: " + Name);
-                //sb.AppendLine("Email: " + Email);
-                //sb.AppendLine("Subject: " + Subject);
-                //sb.AppendLine("Message: " + Message);
                 string sName = "Name:" + Name + "";
                 string sEmail = "Email:" + Email + "";
                 string sSubject = "Subject:" + Subject + "";

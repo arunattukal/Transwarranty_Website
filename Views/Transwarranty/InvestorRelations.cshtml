@@ -164,8 +164,9 @@
     });
     function DownloadFile(index) {
         var result = $("#AdvertisementsTbl").find('tr:eq(' + index + ')').find('td:eq(1)').text();
-            var ReportType = result.split('_')[0];
-        var Sub_cat = result.split('_')[1];
+        var ReportName = result.split('_')[0];
+            var ReportType = result.split('_')[1];
+        var Sub_cat = result.split('_')[2];
         var Year = $("#DdlAgmYear").val();
 
         window.location = '/Transwarranty/DownloadPdf?reportId=' + result + "&type=" + ReportType + "&subOption=" + Sub_cat + "&year=" + Year;

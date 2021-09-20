@@ -20,6 +20,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").show();
         $("#div_Annual").hide();
+        $("#div_RptName").hide();
     }
     else if (ReportType == "annual") {
         $("#div_SharePattern").hide();
@@ -28,6 +29,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").show();
+        $("#div_RptName").hide();
     }
     else if (ReportType == "AgmAndEgm") {
         $("#div_SharePattern").hide();
@@ -36,6 +38,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
+        $("#div_RptName").show();
     }
     else if (ReportType == "shareholder") {
         if (Sub_cat == "corporategovernance") {
@@ -61,6 +64,7 @@ function ReportType() {
             $("#div_RptCaption").show();
             $("#div_Period").hide();
             $("#div_Annual").hide();
+            $("#div_RptName").show();
         }
     }
     else if (ReportType == "stockexchange") {
@@ -70,6 +74,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
+        $("#div_RptName").show();
     }
     else if (ReportType == "materialevents") {
         $("#div_SharePattern").hide();
@@ -78,6 +83,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
+        $("#div_RptName").show();
     }
     else if (ReportType == "unclaimeddividend") {
         $("#div_SharePattern").hide();
@@ -86,6 +92,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
+        $("#div_RptName").show();
     }
     else if (ReportType == "policies") {
         $("#div_SharePattern").hide();
@@ -94,6 +101,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
+        $("#div_RptName").show();
     }
     else if (ReportType == "grievances") {
         $("#div_SharePattern").hide();
@@ -102,6 +110,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
+        $("#div_RptName").show();
     }
     else if (ReportType == "newspaperadvertisment") {
         $("#div_SharePattern").hide();
@@ -110,6 +119,7 @@ function ReportType() {
         $("#div_RptCaption").show();
         $("#div_Period").hide();
         $("#div_Annual").hide();
+        $("#div_RptName").show();
     }
 }
 
@@ -125,6 +135,11 @@ function Upload() {
     var Subtype = $("#SharePattern").val();
     var Subfin = $("#FinancialPattern").val();
     var SubAnnu = $("#AnnualPattern").val();
+    var ReportName = $("#ReportName").val();
+    if (ReportName == "") {
+        swal("Report Name Cannot be blank");
+        return false;
+    }
     if (ReportType == "annual") {
         Quarter = "annual";
     }
@@ -149,6 +164,7 @@ function Upload() {
                     formData.append("ShareHolding_Sub", Subtype);
                     formData.append("Financial_Sub", Subfin);
                     formData.append("Annual_Sub", SubAnnu);
+                    formData.append("Report_Name", ReportName);
                     $.ajax({
                         type: "POST",
                         url: "/ReportUpload/DocumentUpload",
